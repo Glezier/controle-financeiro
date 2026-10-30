@@ -10,17 +10,12 @@ export function AppLayout({ user }: { user: UserProfile }) {
   const [profileOpen, setProfileOpen] = useState(false)
   const mainRef = useRef<HTMLElement>(null)
   const { pathname } = useLocation()
-  const previousPath = useRef(pathname)
-
   useEffect(() => {
-    if (previousPath.current !== pathname) {
-      previousPath.current = pathname
-      const frame = requestAnimationFrame(() => {
-        mainRef.current?.focus()
-        window.scrollTo(0, 0)
-      })
-      return () => cancelAnimationFrame(frame)
-    }
+    const frame = requestAnimationFrame(() => {
+      mainRef.current?.focus()
+      window.scrollTo(0, 0)
+    })
+    return () => cancelAnimationFrame(frame)
   }, [pathname])
 
   useEffect(() => {
