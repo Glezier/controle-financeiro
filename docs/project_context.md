@@ -9,7 +9,11 @@ Aplicação web para controle financeiro pessoal, conforme o Projeto 2 de Gerên
 - Supabase: PostgreSQL, Auth e Row Level Security (RLS)
 - Zod para validação; Vitest para regras de negócio
 - Vercel para deploy; GitHub para versionamento
-- Usar Supabase JS e migrações SQL; não criar API Express nem ORM sem necessidade comprovada
+- API REST com Express e TypeScript.
+- Prisma ORM para acesso ao PostgreSQL hospedado no Supabase.
+- Migrações versionadas com Prisma Migrate, incluindo SQL para constraints e RLS quando necessário.
+- Supabase Auth para autenticação.
+- Banco de dados acessado exclusivamente pelo backend.
 
 ## Funcionalidades obrigatórias
 1. Cadastro, login e logout; bloquear credenciais inválidas
