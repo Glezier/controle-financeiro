@@ -1,5 +1,7 @@
 # Autenticação visual — Etapa 4
 
+Registro da etapa 4. Na [etapa 5](dashboard.md), a Visão Geral passou a exibir dados financeiros e permitir criação pelo modal; a autenticação continua simulada em memória.
+
 ## Interface e fluxo
 
 `/login` e `/cadastro` compartilham o cartão de autenticação baseado no Stitch, sem sidebar. A navegação segmentada usa links reais, indicação da rota ativa e títulos de documento. Login, cadastro, senha/confirmar senha visíveis ou ocultas, erros por campo e feedbacks de sucesso/falha estão disponíveis.

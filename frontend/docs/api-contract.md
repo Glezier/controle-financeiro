@@ -28,4 +28,21 @@ A confirmação de senha e `acceptedDemo` pertencem apenas à interface. Nenhuma
 - Transporte, renovação e encerramento de sessão conforme a arquitetura do backend.
 - Normalização de erros globais e por campo.
 
-Os demais domínios serão acrescentados quando suas etapas forem implementadas. A futura URL da API será configurada por variável de ambiente com `.env.example` quando houver chamadas HTTP. Nenhuma URL privada ou credencial real é necessária para a simulação atual.
+## Visão geral e criação de transações — etapa 5
+
+O contrato interno provisório está em `types/finance.ts`:
+
+| Operação interna | Entrada atual | Saída necessária para a interface |
+| --- | --- | --- |
+| `getDashboard` | Proprietário do mock, período `YYYY-MM` | Categorias disponíveis, períodos, resumo efetivado/pendente, seis transações recentes e despesas por categoria |
+| `createTransaction` | Proprietário do mock e dados do formulário | Transação criada ou erro global/por campo |
+
+Os nomes, endpoints e verbos HTTP não estão definidos. O formato `FinanceResult` é uma adaptação do frontend, não uma imposição ao JSON da API. Na integração real, o proprietário deverá vir da sessão validada pelo servidor; o e-mail usado para separar os mocks não deverá ser considerado uma autorização.
+
+`Transaction` usa `id`, `categoryId`, `type`, `amountCents`, `date`, `description`, `status` e `createdAt`. `amountCents` representa um inteiro interno do frontend; o campo `amount numeric(12,2)` do backend será convertido pelo adaptador, após alinhamento do formato JSON decimal. Datas financeiras permanecerão `YYYY-MM-DD`, enquanto `createdAt` representa um timestamp.
+
+Categorias têm identificador, nome e tipo. `appearance` (ícone/cor) é metadado demonstrativo opcional; não existe no schema e não exige alteração do backend. Respostas de dashboard e períodos são modelos de apresentação provisórios; a equipe pode disponibilizar agregações no servidor com outro formato, preservando as regras documentadas.
+
+Pendências não entram no saldo disponível nem na distribuição de despesas efetivadas. Categoria obrigatória, do mesmo usuário e tipo, e valor positivo são regras existentes no contexto/schema. O limite de 200 caracteres da descrição é uma decisão provisória do cliente. Paginação completa, edição, exclusão, filtros detalhados e contratos de relatórios serão alinhados em suas etapas.
+
+A futura URL da API será configurada por variável de ambiente com `.env.example` quando houver chamadas HTTP. Nenhuma URL privada ou credencial real é necessária para a simulação atual.

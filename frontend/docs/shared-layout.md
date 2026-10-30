@@ -1,6 +1,7 @@
 # Layout compartilhado — Etapa 3
 
 Registro da etapa 3. Na [etapa 4](authentication.md), o perfil fixo foi substituído pela sessão em memória, “Sair” foi habilitado e o acesso às páginas passou a depender do login demonstrativo.
+Na [etapa 5](dashboard.md), a Visão Geral recebeu dados financeiros, e o contêiner da tabela foi ajustado para conter rótulos acessíveis e o foco em telas estreitas.
 
 ## Entrega
 
