@@ -1,3 +1,4 @@
+import { financeRequest as request } from './financeRequest'
 import { createMockFinance } from '../mocks/finance'
 import { z } from 'zod'
 import type {
@@ -18,22 +19,6 @@ import { selectTransactions, transactionQuerySchema } from '../utils/transaction
 
 export { financeDemoPeriod } from '../mocks/finance'
 
-async function waitForMock(signal?: AbortSignal): Promise<void> {
-  await new Promise<void>((resolve) => {
-    if (signal?.aborted) {
-      resolve()
-      return
-    }
-    const finish = () => {
-      clearTimeout(timer)
-      signal?.removeEventListener('abort', finish)
-      resolve()
-    }
-    const timer = setTimeout(finish, 450)
-    signal?.addEventListener('abort', finish, { once: true })
-  })
-}
-
 export function createFinanceService(adapter: FinanceAdapter = createMockFinance()) {
   const missing = (): FinanceResult<never> => ({
     ok: false,
@@ -42,33 +27,6 @@ export function createFinanceService(adapter: FinanceAdapter = createMockFinance
       message: 'A transação não está mais disponível. Atualize a listagem.',
     },
   })
-  async function request<T>(
-    operation: () => Promise<FinanceResult<T>>,
-    options: FinanceRequestOptions,
-  ): Promise<FinanceResult<T>> {
-    await waitForMock(options.signal)
-    if (options.signal?.aborted)
-      return { ok: false, error: { code: 'cancelled', message: 'Operação cancelada.' } }
-    if (options.simulateFailure)
-      return {
-        ok: false,
-        error: {
-          code: 'unavailable',
-          message: 'Falha de demonstração. Tente novamente.',
-        },
-      }
-    try {
-      return await operation()
-    } catch {
-      return {
-        ok: false,
-        error: {
-          code: 'unavailable',
-          message: 'Não foi possível concluir a operação. Tente novamente.',
-        },
-      }
-    }
-  }
   async function saveTransaction(
     scope: string,
     input: TransactionDraft,
