@@ -4,6 +4,8 @@ import type { UserProfile } from '../../types/profile'
 import { Button } from '../ui/Button'
 import { Icon } from '../ui/Icon'
 import { Brand } from './Brand'
+import { useState } from 'react'
+import { useAuth } from '../../hooks/useAuth'
 
 export function Sidebar({
   user,
@@ -14,6 +16,19 @@ export function Sidebar({
   onNavigate?: () => void
   showBrand?: boolean
 }) {
+  const { signOut } = useAuth()
+  const [signingOut, setSigningOut] = useState(false)
+  const [logoutError, setLogoutError] = useState('')
+  async function handleSignOut() {
+    if (signingOut) return
+    setSigningOut(true)
+    setLogoutError('')
+    const result = await signOut()
+    if (!result.ok) {
+      setLogoutError(result.error.message)
+      setSigningOut(false)
+    }
+  }
   const initials = user.name
     .trim()
     .split(/\s+/)
@@ -57,19 +72,27 @@ export function Sidebar({
         </div>
         <Button
           variant="secondary"
-          disabled
+          loading={signingOut}
+          onClick={() => {
+            void handleSignOut()
+          }}
           className="w-full"
           aria-describedby={showBrand ? 'desktop-signout-note' : 'mobile-signout-note'}
         >
           <Icon name="logout" />
-          Sair
+          {signingOut ? 'Saindo…' : 'Sair'}
         </Button>
         <p
           id={showBrand ? 'desktop-signout-note' : 'mobile-signout-note'}
           className="text-caption text-ink-secondary"
         >
-          Sessão de demonstração. Autenticação em breve.
+          Sessão de demonstração, sem autenticação real.
         </p>
+        {logoutError && (
+          <p role="alert" className="text-caption text-error">
+            {logoutError}
+          </p>
+        )}
         <Link to="/componentes" onClick={onNavigate} className="text-caption underline">
           Amostra de componentes
         </Link>

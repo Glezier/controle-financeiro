@@ -1,14 +1,60 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AppLayout } from '../components/layout/AppLayout'
 import { ComponentsPreview } from '../pages/ComponentsPreview'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
-import type { UserProfile } from '../types/profile'
+import { AuthPage } from '../pages/AuthPage'
+import { Feedback } from '../components/feedback/Feedback'
+import { useAuth } from '../hooks/useAuth'
+import { authReturnPath } from '../utils/authValidation'
 import { navigation } from './navigation'
 
-export function AppRoutes({ user }: { user: UserProfile }) {
+export function AppRoutes() {
+  const { state } = useAuth()
+  const location = useLocation()
+  if (state.status === 'loading')
+    return (
+      <main className="auth-loading">
+        <Feedback kind="loading" title="Preparando demonstração">
+          Aguarde um instante.
+        </Feedback>
+      </main>
+    )
+  const returnTo = authReturnPath(location.state?.from)
   return (
     <Routes>
-      <Route element={<AppLayout user={user} />}>
+      <Route
+        path="/login"
+        element={
+          state.status === 'authenticated' ? (
+            <Navigate to={returnTo} replace />
+          ) : (
+            <AuthPage mode="login" />
+          )
+        }
+      />
+      <Route
+        path="/cadastro"
+        element={
+          state.status === 'authenticated' ? (
+            <Navigate to={returnTo} replace />
+          ) : (
+            <AuthPage mode="register" />
+          )
+        }
+      />
+      <Route
+        element={
+          state.status === 'authenticated' ? (
+            <AppLayout user={state.user} />
+          ) : (
+            <Navigate
+              to="/login"
+              state={{ from: authReturnPath(location.pathname + location.search) }}
+              replace
+            />
+          )
+        }
+      >
         <Route index element={<Navigate to="/visao-geral" replace />} />
         {navigation.map((item) => (
           <Route

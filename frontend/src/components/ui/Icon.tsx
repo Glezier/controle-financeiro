@@ -1,6 +1,24 @@
 import type { ReactNode } from 'react'
 
 const paths = {
+  eye: (
+    <>
+      <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </>
+  ),
+  eyeOff: (
+    <>
+      <path d="m3 3 18 18M10.5 5.1 12 5c6 0 10 7 10 7a21 21 0 0 1-3 3.6M6.2 6.2A24 24 0 0 0 2 12s4 7 10 7a12 12 0 0 0 5.5-1.5" />
+      <path d="M10 10a3 3 0 0 0 4 4" />
+    </>
+  ),
+  arrowRight: <path d="M4 12h16m-6-6 6 6-6 6" />,
+  school: (
+    <>
+      <path d="m2 9 10-5 10 5-10 5ZM6 11v6l6 3 6-3v-6M22 9v7" />
+    </>
+  ),
   dashboard: (
     <>
       <rect x="3" y="3" width="7" height="7" rx="1" />
