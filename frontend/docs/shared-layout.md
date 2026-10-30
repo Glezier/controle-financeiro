@@ -1,5 +1,7 @@
 # Layout compartilhado — Etapa 3
 
+Registro da etapa 3. Na [etapa 4](authentication.md), o perfil fixo foi substituído pela sessão em memória, “Sair” foi habilitado e o acesso às páginas passou a depender do login demonstrativo.
+
 ## Entrega
 
 - Sidebar desktop de 256 px, cabeçalho de 64 px e área principal limitada a 1440 px.

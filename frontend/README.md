@@ -4,10 +4,13 @@ Interface do MVP acadêmico de controle financeiro pessoal, independente de `bac
 
 ## Estado atual
 
-Etapa 3: fundação visual, layout responsivo, navegação e componentes compartilhados concluídos. As páginas financeiras exibem espaços reservados; a amostra interativa de componentes está em `/componentes`. Autenticação e funcionalidades financeiras ficam para as próximas etapas aprovadas.
+Etapa 4: login e cadastro visuais, validação, erros/carregamento simulados e sessão em memória concluídos. As páginas financeiras ainda exibem espaços reservados; a amostra de componentes está em `/componentes` após entrar.
 
 Consulte as decisões e os valores em [Fundação visual](docs/visual-foundation.md).
 Veja as rotas, os componentes e as verificações em [Layout compartilhado](docs/shared-layout.md).
+O fluxo atual está em [Autenticação visual](docs/authentication.md); expectativas da integração estão no [Contrato provisório](docs/api-contract.md).
+
+Acesso fictício: `lucas.mendes@email.com` / `12345678`. A aplicação abre em `/login`. Cadastros e sessão são apagados ao recarregar a página; use apenas dados fictícios.
 
 ## Requisitos e execução
 
@@ -32,24 +35,34 @@ Abra a URL exibida pelo Vite (normalmente http://localhost:5173). O backend e va
 | `npm run lint` | Análise estática, sem avisos permitidos |
 | `npm run build` | Verificação TypeScript e build em `dist/` |
 | `npm run preview` | Prévia local; requer build anterior |
+| `npm test` | Testes de validação e serviços simulados |
+| `npm run test:watch` | Testes em modo de observação |
 
 ## Estrutura inicial
 
 ```text
 frontend/
 ├── docs/
+│   ├── api-contract.md
+│   ├── authentication.md
 │   ├── shared-layout.md
 │   └── visual-foundation.md
 ├── src/
+│   ├── app/
 │   ├── components/
 │   │   ├── feedback/
 │   │   ├── forms/
 │   │   ├── layout/
 │   │   └── ui/
 │   ├── pages/
+│   ├── hooks/
+│   ├── mocks/
+│   ├── services/
+│   ├── utils/
 │   ├── routes/
 │   ├── types/
 │   ├── styles/
+│   │   ├── auth.css
 │   │   ├── components.css
 │   │   ├── global.css
 │   │   ├── layout.css
@@ -58,6 +71,7 @@ frontend/
 │   ├── index.css
 │   └── main.tsx
 ├── .gitignore
+├── tests/
 ├── eslint.config.js
 ├── index.html
 ├── package.json
@@ -66,6 +80,7 @@ frontend/
 ├── tsconfig.app.json
 ├── tsconfig.node.json
 ├── vite.config.ts
+├── vitest.config.ts
 └── README.md
 ```
 
@@ -78,8 +93,10 @@ frontend/
 - Tailwind CSS e plugin Vite: estilos compilados, sem CDN, com tokens CSS semânticos.
 - @fontsource-variable/inter: fonte Inter local, com somente o arquivo latino referenciado no build.
 - ESLint, @eslint/js, typescript-eslint, plugins de hooks/React Refresh e globals: análise estática do código e das configurações.
+- Zod: validação de formulários e entradas dos serviços de autenticação.
+- Vitest 4: testes de validação e serviços simulados, incluindo cancelamento e sessão.
 
-Zod e ferramentas de testes do projeto serão instalados quando necessários. A interação do layout foi verificada com o Playwright disponível no ambiente, sem adicioná-lo às dependências. Não há autenticação ou validação financeira implementada nesta etapa.
+A interação das telas foi verificada com o Playwright disponível no ambiente, sem adicioná-lo às dependências. Não há autenticação real ou validação financeira implementada nesta etapa.
 
 ## Limites e próxima etapa
 
@@ -88,4 +105,4 @@ Zod e ferramentas de testes do projeto serão instalados quando necessários. A 
 - Metadados visuais extras de categoria serão provisórios, sem mudanças no backend.
 - Exportação PDF/CSV, recuperação de senha, orçamento e reserva estão fora do escopo funcional inicial.
 - Dados seguirão páginas/componentes → serviços assíncronos → mocks, depois API. Páginas não importarão mocks diretamente.
-- A etapa 4, autenticação visual, depende de aprovação após revisão do layout compartilhado.
+- A etapa 5, Visão Geral, depende de aprovação após revisão da autenticação visual.
