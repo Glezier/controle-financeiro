@@ -7,6 +7,7 @@ import { Feedback } from '../components/feedback/Feedback'
 import { useAuth } from '../hooks/useAuth'
 import { authReturnPath } from '../utils/authValidation'
 import { navigation } from './navigation'
+import { DashboardPage } from '../pages/DashboardPage'
 
 export function AppRoutes() {
   const { state } = useAuth()
@@ -56,13 +57,16 @@ export function AppRoutes() {
         }
       >
         <Route index element={<Navigate to="/visao-geral" replace />} />
-        {navigation.map((item) => (
-          <Route
-            key={item.path}
-            path={item.path}
-            element={<PlaceholderPage title={item.label} description={item.description} />}
-          />
-        ))}
+        <Route path="/visao-geral" element={<DashboardPage />} />
+        {navigation
+          .filter((item) => item.path !== '/visao-geral')
+          .map((item) => (
+            <Route
+              key={item.path}
+              path={item.path}
+              element={<PlaceholderPage title={item.label} description={item.description} />}
+            />
+          ))}
         <Route path="/componentes" element={<ComponentsPreview />} />
         <Route
           path="*"

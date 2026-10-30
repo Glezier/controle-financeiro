@@ -1,6 +1,63 @@
 import type { ReactNode } from 'react'
 
 const paths = {
+  arrowDown: <path d="M12 3v18m-6-6 6 6 6-6" />,
+  arrowUp: <path d="M12 21V3m-6 6 6-6 6 6" />,
+  more: (
+    <>
+      <circle cx="12" cy="5" r="1" />
+      <circle cx="12" cy="12" r="1" />
+      <circle cx="12" cy="19" r="1" />
+    </>
+  ),
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 6v6l4 2" />
+    </>
+  ),
+  pie: (
+    <>
+      <path d="M12 3a9 9 0 1 0 9 9h-9Z" />
+      <path d="M15 2v7h7a9 9 0 0 0-7-7Z" />
+    </>
+  ),
+  home: (
+    <>
+      <path d="m3 11 9-8 9 8v10h-6v-7H9v7H3Z" />
+    </>
+  ),
+  shopping: (
+    <>
+      <path d="M2 3h3l3 12h11l3-9H6" />
+      <circle cx="10" cy="20" r="1" />
+      <circle cx="18" cy="20" r="1" />
+    </>
+  ),
+  transport: (
+    <>
+      <rect x="5" y="3" width="14" height="16" rx="3" />
+      <path d="M5 10h14M8 19v2M16 19v2M8 15h.01M16 15h.01" />
+    </>
+  ),
+  health: (
+    <>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M9 5V3h6v2M12 10v6M9 13h6" />
+    </>
+  ),
+  leisure: (
+    <>
+      <path d="M3 4h7l2 2 2-2h7v16h-7l-2 2-2-2H3ZM12 6v16" />
+    </>
+  ),
+  income: (
+    <>
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M6 9v6M18 9v6" />
+    </>
+  ),
   eye: (
     <>
       <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" />
