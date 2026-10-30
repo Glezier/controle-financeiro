@@ -1,0 +1,75 @@
+/* Latin covers the Portuguese copy; avoid bundling unused font subsets. */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2');
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background: var(--color-canvas);
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    min-inline-size: 20rem;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  #root { min-block-size: 100dvh; }
+
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  a { color: var(--color-primary); text-underline-offset: 0.2em; }
+  a:hover { color: var(--color-primary-hover); }
+  button, input, select, textarea { font: inherit; }
+  input, select, textarea { accent-color: var(--color-primary); }
+  button:enabled, select:enabled { cursor: pointer; }
+  :disabled { cursor: not-allowed; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    color: var(--color-ink);
+    background: var(--color-primary-subtle);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility financial-figure {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Review-only composition; shared product components start in stage 3. */
+.foundation-preview {
+  width: 100%;
+  max-width: var(--container-content);
+  margin-inline: auto;
+  padding: var(--layout-gutter);
+}
+
+.foundation-preview__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: var(--spacing-space-md);
+}
