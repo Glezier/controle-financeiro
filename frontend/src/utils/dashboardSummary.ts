@@ -1,4 +1,5 @@
 import type { Category, DashboardSnapshot, Transaction, TransactionView } from '../types/finance'
+import { availableFinancialPeriods, summarizeTransactions } from './financialSummary'
 
 export function summarizeDashboard(
   categories: Category[],
@@ -14,12 +15,10 @@ export function summarizeDashboard(
       if (!category) throw new Error('Transaction category is missing or inconsistent')
       return { ...item, category }
     })
-  const paidIncome = filtered.filter((item) => item.type === 'income' && item.status === 'paid')
   const paidExpenses = filtered.filter((item) => item.type === 'expense' && item.status === 'paid')
-  const pending = filtered.filter((item) => item.status === 'pending')
   const sum = (items: Transaction[]) => items.reduce((total, item) => total + item.amountCents, 0)
-  const incomeCents = sum(paidIncome)
-  const expenseCents = sum(paidExpenses)
+  const summary = summarizeTransactions(filtered)
+  const { expenseCents } = summary
   const expensesByCategory = categories
     .filter((item) => item.type === 'expense')
     .map((category) => {
@@ -38,29 +37,9 @@ export function summarizeDashboard(
 
   return structuredClone({
     period,
-    availablePeriods: Array.from(
-      new Set([
-        '2024-10',
-        '2024-09',
-        '2024-08',
-        period,
-        ...transactions.map((item) => item.date.slice(0, 7)),
-      ]),
-    )
-      .sort()
-      .reverse(),
+    availablePeriods: availableFinancialPeriods(transactions, period),
     categories,
-    summary: {
-      incomeCents,
-      expenseCents,
-      balanceCents: incomeCents - expenseCents,
-      paidIncomeCount: paidIncome.length,
-      paidExpenseCount: paidExpenses.length,
-      pendingIncomeCents: sum(pending.filter((item) => item.type === 'income')),
-      pendingExpenseCents: sum(pending.filter((item) => item.type === 'expense')),
-      pendingCount: pending.length,
-      nextPendingDate: pending.map((item) => item.date).sort()[0] ?? null,
-    },
+    summary,
     recentTransactions: [...filtered]
       .sort(
         (a, b) =>

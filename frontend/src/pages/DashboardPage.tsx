@@ -198,7 +198,7 @@ export function DashboardPage() {
             scope={user.email}
             period={period}
             categories={state.data.categories}
-            onCreated={handleCreated}
+            onSaved={handleCreated}
             onCancel={() => setCreating(false)}
           />
         )}

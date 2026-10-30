@@ -11,13 +11,13 @@ export function TransactionForm({
   scope,
   period,
   categories,
-  onCreated,
+  onSaved,
   onCancel,
 }: {
   scope: string
   period: string
   categories: Category[]
-  onCreated: (transaction: Transaction) => void
+  onSaved: (transaction: Transaction) => void
   onCancel: () => void
 }) {
   const today = new Date()
@@ -59,7 +59,7 @@ export function TransactionForm({
         signal: request.signal,
       })
       if (request.signal.aborted) return
-      if (result.ok) onCreated(result.data)
+      if (result.ok) onSaved(result.data)
       else {
         setFailure(result.error.message)
         if (result.error.fields) setErrors(result.error.fields)
