@@ -132,9 +132,13 @@
     color: var(--color-error);
   }
   .ui-table-scroll {
+    position: relative;
     max-width: 100%;
     overflow-x: auto;
     border-radius: var(--radius-card);
+  }
+  .ui-table-scroll:focus-visible {
+    outline-offset: -3px;
   }
   .ui-table {
     width: 100%;
