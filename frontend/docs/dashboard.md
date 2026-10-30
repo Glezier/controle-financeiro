@@ -1,5 +1,7 @@
 # Visão Geral — Etapa 5
 
+Registro da entrega da etapa 5. Na [etapa 6](transactions.md), a tela de Transações passou a permitir edição e exclusão no mesmo conjunto demonstrativo; o formulário e o cálculo de indicadores são compartilhados. As verificações abaixo registram o resultado original desta etapa.
+
 ## Entrega
 
 Dashboard em `/visao-geral`, com saudação do usuário demonstrativo, filtro de mês, saldo do período, receitas e despesas efetivadas, pendências separadas, seis transações recentes, detalhes de leitura e distribuição de despesas por categoria em SVG. O modal “Registrar Nova Transação” cria registros apenas na memória da demonstração e atualiza os indicadores.
@@ -66,4 +68,4 @@ Passaram no navegador: períodos e vazio, erro/nova tentativa, detalhes, Tab/Shi
 
 A revisão encontrou um rótulo acessível da tabela escapando da área de rolagem. O contêiner compartilhado passou a posicionar seus descendentes e manter o foco visível dentro da área, sem ocultar conteúdo ou desabilitar a rolagem interna.
 
-A etapa 6, Transações, depende de revisão e aprovação desta entrega.
+A implementação da etapa 6 está documentada em [Transações](transactions.md).

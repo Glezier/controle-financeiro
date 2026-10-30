@@ -4,12 +4,13 @@ Interface do MVP acadêmico de controle financeiro pessoal, independente de `bac
 
 ## Estado atual
 
-Etapa 5: autenticação visual e dashboard funcional com dados simulados, indicadores, pendências, despesas por categoria, transações recentes e modal de criação. Transações, Categorias e Relatórios ainda exibem espaços reservados; a amostra de componentes está em `/componentes` após entrar.
+Etapa 6: autenticação visual, dashboard e gestão de transações com dados simulados. A página de Transações permite buscar, filtrar, paginar, criar, editar, consultar detalhes e excluir com confirmação. Categorias e Relatórios ainda exibem espaços reservados; a amostra de componentes está em `/componentes` após entrar.
 
 Consulte as decisões e os valores em [Fundação visual](docs/visual-foundation.md).
 Veja as rotas, os componentes e as verificações em [Layout compartilhado](docs/shared-layout.md).
 O fluxo atual está em [Autenticação visual](docs/authentication.md); expectativas da integração estão no [Contrato provisório](docs/api-contract.md).
 Veja regras, dados e cenários de revisão em [Visão Geral](docs/dashboard.md).
+Veja filtros, edição, exclusão e cenários de revisão em [Transações](docs/transactions.md).
 
 Acesso fictício: `lucas.mendes@email.com` / `12345678`. A aplicação abre em `/login`. Cadastros, sessão e lançamentos simulados são reiniciados ao recarregar a página; use apenas dados fictícios. O dashboard inicia em outubro de 2024, conforme a referência.
 
@@ -48,6 +49,7 @@ frontend/
 │   ├── authentication.md
 │   ├── dashboard.md
 │   ├── shared-layout.md
+│   ├── transactions.md
 │   └── visual-foundation.md
 ├── src/
 │   ├── app/
@@ -71,6 +73,7 @@ frontend/
 │   │   ├── dashboard.css
 │   │   ├── global.css
 │   │   ├── layout.css
+│   │   ├── transactions.css
 │   │   └── tokens.css
 │   ├── App.tsx
 │   ├── index.css
@@ -110,4 +113,4 @@ A interação das telas é verificada com o Playwright disponível no ambiente, 
 - Metadados visuais extras de categoria serão provisórios, sem mudanças no backend.
 - Exportação PDF/CSV, recuperação de senha, orçamento e reserva estão fora do escopo funcional inicial.
 - Dados seguirão páginas/componentes → serviços assíncronos → mocks, depois API. Páginas não importarão mocks diretamente.
-- A etapa 6, Transações, depende de aprovação após revisão da Visão Geral.
+- A etapa 7, Categorias, depende de aprovação após revisão de Transações. A exclusão de categorias em uso deverá ser bloqueada.
