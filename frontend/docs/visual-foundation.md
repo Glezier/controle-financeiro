@@ -1,5 +1,7 @@
 # Fundação visual — Etapa 2
 
+Registro da entrega da etapa 2. Sua prévia estática foi substituída na etapa 3 pelo [layout compartilhado e pela amostra de componentes](shared-layout.md); os tokens permanecem em uso.
+
 ## Origem e prioridade
 
 Tokens extraídos dos cinco `code.html` de `references/stitch_controle_financeiro_mvp_prototype/` e conferidos com seus `screen.png`. O `controle_financeiro_precision/DESIGN.md` é complementar: sua descrição textual diverge dos HTMLs em cores e raios. As referências permanecem intactas.

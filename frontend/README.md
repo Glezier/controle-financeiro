@@ -4,9 +4,10 @@ Interface do MVP acadêmico de controle financeiro pessoal, independente de `bac
 
 ## Estado atual
 
-Etapa 2: configuração inicial e fundação visual concluídas. A aplicação exibe uma amostra estática de cores, superfícies, tipografia e números para revisão. Telas funcionais, layout compartilhado, rotas, serviços e mocks ficam para as próximas etapas aprovadas.
+Etapa 3: fundação visual, layout responsivo, navegação e componentes compartilhados concluídos. As páginas financeiras exibem espaços reservados; a amostra interativa de componentes está em `/componentes`. Autenticação e funcionalidades financeiras ficam para as próximas etapas aprovadas.
 
 Consulte as decisões e os valores em [Fundação visual](docs/visual-foundation.md).
+Veja as rotas, os componentes e as verificações em [Layout compartilhado](docs/shared-layout.md).
 
 ## Requisitos e execução
 
@@ -37,10 +38,21 @@ Abra a URL exibida pelo Vite (normalmente http://localhost:5173). O backend e va
 ```text
 frontend/
 ├── docs/
+│   ├── shared-layout.md
 │   └── visual-foundation.md
 ├── src/
+│   ├── components/
+│   │   ├── feedback/
+│   │   ├── forms/
+│   │   ├── layout/
+│   │   └── ui/
+│   ├── pages/
+│   ├── routes/
+│   ├── types/
 │   ├── styles/
+│   │   ├── components.css
 │   │   ├── global.css
+│   │   ├── layout.css
 │   │   └── tokens.css
 │   ├── App.tsx
 │   ├── index.css
@@ -60,13 +72,14 @@ frontend/
 ## Dependências e decisões
 
 - React e React DOM: renderização e componentes.
+- React Router DOM: rotas, redirecionamento inicial e navegação com estado ativo.
 - TypeScript e tipos de React/DOM/Node: tipagem da aplicação e das configurações. TypeScript 6 atende ao suporte declarado pelo typescript-eslint adotado.
 - Vite e plugin React: desenvolvimento, transformação de TSX e build.
 - Tailwind CSS e plugin Vite: estilos compilados, sem CDN, com tokens CSS semânticos.
 - @fontsource-variable/inter: fonte Inter local, com somente o arquivo latino referenciado no build.
 - ESLint, @eslint/js, typescript-eslint, plugins de hooks/React Refresh e globals: análise estática do código e das configurações.
 
-React Router, Zod, testes e ferramentas adicionais de formatação serão instalados somente quando necessários. Ainda não há testes automatizados: esta etapa não implementa comportamentos de domínio ou formulários.
+Zod e ferramentas de testes do projeto serão instalados quando necessários. A interação do layout foi verificada com o Playwright disponível no ambiente, sem adicioná-lo às dependências. Não há autenticação ou validação financeira implementada nesta etapa.
 
 ## Limites e próxima etapa
 
@@ -75,4 +88,4 @@ React Router, Zod, testes e ferramentas adicionais de formatação serão instal
 - Metadados visuais extras de categoria serão provisórios, sem mudanças no backend.
 - Exportação PDF/CSV, recuperação de senha, orçamento e reserva estão fora do escopo funcional inicial.
 - Dados seguirão páginas/componentes → serviços assíncronos → mocks, depois API. Páginas não importarão mocks diretamente.
-- A etapa 3, layout compartilhado, depende de aprovação após revisão da fundação visual.
+- A etapa 4, autenticação visual, depende de aprovação após revisão do layout compartilhado.
