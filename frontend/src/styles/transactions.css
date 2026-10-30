@@ -1,0 +1,121 @@
+@layer components {
+  .transactions-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .transactions-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .transactions-heading h1 {
+    margin-top: 0.5rem;
+    overflow-wrap: anywhere;
+  }
+  .transactions-heading h1:focus {
+    outline: none;
+  }
+  .transaction-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .transaction-summary .summary-card--balance .summary-value {
+    color: var(--color-primary);
+  }
+  .summary-card--pending .summary-value,
+  .summary-card--pending .summary-icon {
+    color: var(--color-warning);
+  }
+  .summary-card--pending .summary-icon {
+    background: var(--color-warning-subtle);
+  }
+  .transaction-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: end;
+    gap: 0.75rem;
+  }
+  .transaction-filters .ui-field label {
+    font-size: var(--text-caption);
+  }
+  .transaction-filters input,
+  .transaction-filters select {
+    background: var(--color-surface-subtle);
+  }
+  .transactions-table {
+    padding: 0;
+    overflow: hidden;
+  }
+  .transactions-table .ui-table td,
+  .transactions-table .ui-table th {
+    padding: 0.625rem 0.75rem;
+  }
+  .transactions-table td:first-child .ui-badge {
+    text-transform: uppercase;
+    font-size: var(--text-label);
+    letter-spacing: 0.04em;
+  }
+  .transaction-row-actions {
+    display: flex;
+    gap: 0.25rem;
+  }
+  .transaction-delete-action:enabled:hover {
+    color: var(--color-error);
+    background: var(--color-error-subtle);
+  }
+  .transaction-detail-link {
+    min-width: 0;
+    min-height: 2.75rem;
+    padding: 0;
+    justify-content: start;
+    color: var(--color-ink);
+  }
+  .transaction-detail-link:enabled:hover {
+    text-decoration: underline;
+    background: transparent;
+  }
+  .transactions-table .transaction-name {
+    max-width: 16rem;
+  }
+  .transaction-table-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1rem;
+    background: var(--color-surface-subtle);
+  }
+  .transaction-pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  @media (min-width: 48rem) {
+    .transaction-summary {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .transaction-filters {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 80rem) {
+    .transactions-heading {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  @media (min-width: 88rem) {
+    .transaction-summary {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .transaction-filters {
+      grid-template-columns: minmax(12rem, 2fr) minmax(10rem, 1fr) repeat(
+          3,
+          minmax(7.5rem, 1fr)
+        ) auto;
+    }
+  }
+}

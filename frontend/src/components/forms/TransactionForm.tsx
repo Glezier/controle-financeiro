@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Category, Transaction, TransactionDraft } from '../../types/finance'
+import type { Category, Transaction, TransactionDraft, TransactionType } from '../../types/finance'
+import { amountInputValue } from '../../utils/financeFormat'
 import { financeService } from '../../services/financeService'
 import { transactionFieldErrors, transactionSchema } from '../../utils/transactionValidation'
 import { Feedback } from '../feedback/Feedback'
@@ -13,23 +14,38 @@ export function TransactionForm({
   categories,
   onSaved,
   onCancel,
+  initialTransaction,
+  defaultType = 'expense',
 }: {
   scope: string
   period: string
   categories: Category[]
   onSaved: (transaction: Transaction) => void
   onCancel: () => void
+  initialTransaction?: Transaction
+  defaultType?: TransactionType
 }) {
   const today = new Date()
   const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
-  const [values, setValues] = useState<TransactionDraft>({
-    type: 'expense',
-    description: '',
-    amount: '',
-    date: localDate.startsWith(period) ? localDate : `${period}-01`,
-    categoryId: '',
-    status: 'paid',
-  })
+  const [values, setValues] = useState<TransactionDraft>(
+    initialTransaction
+      ? {
+          type: initialTransaction.type,
+          description: initialTransaction.description,
+          amount: amountInputValue(initialTransaction.amountCents),
+          date: initialTransaction.date,
+          categoryId: initialTransaction.categoryId,
+          status: initialTransaction.status,
+        }
+      : {
+          type: defaultType,
+          description: '',
+          amount: '',
+          date: localDate.startsWith(period) ? localDate : `${period}-01`,
+          categoryId: '',
+          status: 'paid',
+        },
+  )
   const [busy, setBusy] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [failure, setFailure] = useState('')
@@ -55,9 +71,11 @@ export function TransactionForm({
     controller.current = request
     setBusy(true)
     try {
-      const result = await financeService.createTransaction(scope, parsed.data, {
-        signal: request.signal,
-      })
+      const result = initialTransaction
+        ? await financeService.updateTransaction(scope, initialTransaction.id, parsed.data, {
+            signal: request.signal,
+          })
+        : await financeService.createTransaction(scope, parsed.data, { signal: request.signal })
       if (request.signal.aborted) return
       if (result.ok) onSaved(result.data)
       else {
@@ -77,7 +95,7 @@ export function TransactionForm({
     <form
       ref={formRef}
       className="transaction-form"
-      aria-label="Nova transação"
+      aria-label={initialTransaction ? 'Editar transação' : 'Nova transação'}
       aria-busy={busy}
       noValidate
       onSubmit={(event) => {
@@ -190,7 +208,7 @@ export function TransactionForm({
           Cancelar
         </Button>
         <Button type="submit" loading={busy} disabled={compatibleCategories.length === 0}>
-          {busy ? 'Salvando…' : 'Salvar Transação'}
+          {busy ? 'Salvando…' : initialTransaction ? 'Salvar Alterações' : 'Salvar Transação'}
         </Button>
       </div>
     </form>

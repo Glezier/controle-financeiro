@@ -8,6 +8,7 @@ import { useAuth } from '../hooks/useAuth'
 import { authReturnPath } from '../utils/authValidation'
 import { navigation } from './navigation'
 import { DashboardPage } from '../pages/DashboardPage'
+import { TransactionsPage } from '../pages/TransactionsPage'
 
 export function AppRoutes() {
   const { state } = useAuth()
@@ -58,8 +59,9 @@ export function AppRoutes() {
       >
         <Route index element={<Navigate to="/visao-geral" replace />} />
         <Route path="/visao-geral" element={<DashboardPage />} />
+        <Route path="/transacoes" element={<TransactionsPage />} />
         {navigation
-          .filter((item) => item.path !== '/visao-geral')
+          .filter((item) => item.path !== '/visao-geral' && item.path !== '/transacoes')
           .map((item) => (
             <Route
               key={item.path}

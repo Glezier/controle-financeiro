@@ -5,7 +5,13 @@ import { Card } from '../ui/Card'
 import { Icon } from '../ui/Icon'
 import type { IconName } from '../ui/Icon'
 
-export function FinancialSummary({ summary }: { summary: DashboardSummary }) {
+export function FinancialSummary({
+  summary,
+  showPending = false,
+}: {
+  summary: DashboardSummary
+  showPending?: boolean
+}) {
   const cards: {
     title: string
     value: string
@@ -15,11 +21,13 @@ export function FinancialSummary({ summary }: { summary: DashboardSummary }) {
     received?: boolean
   }[] = [
     {
-      title: 'Saldo Disponível',
+      title: showPending ? 'Saldo dos resultados' : 'Saldo Disponível',
       value: formatMoney(summary.balanceCents),
       icon: 'wallet',
       tone: summary.balanceCents < 0 ? 'expense' : 'balance',
-      detail: 'Receitas efetivadas menos despesas efetivadas no período. Não inclui pendências.',
+      detail: showPending
+        ? 'Receitas menos despesas efetivadas nos resultados filtrados.'
+        : 'Receitas efetivadas menos despesas efetivadas no período. Não inclui pendências.',
     },
     {
       title: 'Receitas Efetivadas',
@@ -27,7 +35,7 @@ export function FinancialSummary({ summary }: { summary: DashboardSummary }) {
       icon: 'arrowDown',
       tone: 'income',
       detail: `${summary.paidIncomeCount} ${summary.paidIncomeCount === 1 ? 'receita efetivada' : 'receitas efetivadas'} no período.`,
-      received: summary.incomeCents > 0 && summary.pendingIncomeCents === 0,
+      received: !showPending && summary.incomeCents > 0 && summary.pendingIncomeCents === 0,
     },
     {
       title: 'Despesas Efetivadas',
@@ -37,9 +45,20 @@ export function FinancialSummary({ summary }: { summary: DashboardSummary }) {
       detail: `${summary.paidExpenseCount} ${summary.paidExpenseCount === 1 ? 'despesa efetivada' : 'despesas efetivadas'} no período.`,
     },
   ]
+  const pending: (typeof cards)[number] = {
+    title: 'Despesas Pendentes',
+    value: formatSignedMoney(summary.pendingExpenseCents, 'expense'),
+    icon: 'clock',
+    tone: 'pending',
+    detail: `Receitas pendentes: ${formatMoney(summary.pendingIncomeCents)}. ${summary.pendingCount} ${summary.pendingCount === 1 ? 'lançamento pendente' : 'lançamentos pendentes'}.`,
+  }
+  const displayedCards = showPending ? [cards[1], cards[2], pending, cards[0]] : cards
   return (
-    <section aria-label="Resumo financeiro" className="dashboard-summary">
-      {cards.map((card) => (
+    <section
+      aria-label="Resumo financeiro"
+      className={`dashboard-summary${showPending ? ' transaction-summary' : ''}`}
+    >
+      {displayedCards.map((card) => (
         <Card key={card.title} className={`summary-card summary-card--${card.tone}`}>
           <div className="summary-heading">
             <h2>{card.title}</h2>
