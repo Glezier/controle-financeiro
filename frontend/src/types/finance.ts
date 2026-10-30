@@ -66,7 +66,7 @@ export type FinanceResult<T> =
   | {
       ok: false
       error: {
-        code: 'validation' | 'unavailable' | 'cancelled'
+        code: 'validation' | 'unavailable' | 'cancelled' | 'not_found'
         message: string
         fields?: Record<string, string>
       }
@@ -80,4 +80,27 @@ export interface FinanceAdapter {
   listCategories(scope: string): Promise<Category[]>
   listTransactions(scope: string): Promise<Transaction[]>
   createTransaction(scope: string, input: NewTransaction): Promise<Transaction>
+  updateTransaction(scope: string, id: string, input: NewTransaction): Promise<Transaction | null>
+  deleteTransaction(scope: string, id: string): Promise<boolean>
+}
+
+export interface TransactionQuery {
+  period: string
+  type: TransactionType | 'all'
+  categoryId: string
+  status: TransactionStatus | 'all'
+  search: string
+  page: number
+}
+
+export interface TransactionListSnapshot {
+  items: TransactionView[]
+  total: number
+  totalRecords: number
+  page: number
+  pageSize: number
+  totalPages: number
+  categories: Category[]
+  availablePeriods: string[]
+  summary: DashboardSummary
 }

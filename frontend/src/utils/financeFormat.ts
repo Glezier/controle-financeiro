@@ -22,6 +22,9 @@ const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL
 export function formatMoney(cents: number): string {
   return money.format(cents / 100)
 }
+export function amountInputValue(cents: number): string {
+  return `${Math.trunc(cents / 100)},${String(cents % 100).padStart(2, '0')}`
+}
 export function formatSignedMoney(cents: number, type: 'income' | 'expense'): string {
   return `${type === 'income' ? '+' : '−'} ${formatMoney(cents)}`
 }

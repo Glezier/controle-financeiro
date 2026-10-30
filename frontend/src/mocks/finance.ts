@@ -115,5 +115,31 @@ export function createMockFinance(): FinanceAdapter {
       store.transactions.push(transaction)
       return structuredClone(transaction)
     },
+    async updateTransaction(scope, id, input) {
+      const store = storeFor(scope)
+      const index = store.transactions.findIndex((item) => item.id === id)
+      if (index === -1) return null
+      if (
+        !store.categories.some((item) => item.id === input.categoryId && item.type === input.type)
+      )
+        throw new Error('Incompatible category')
+      if (
+        !Number.isSafeInteger(input.amountCents) ||
+        input.amountCents <= 0 ||
+        input.amountCents > MAX_AMOUNT_CENTS
+      )
+        throw new Error('Invalid amount')
+      const previous = store.transactions[index]
+      const transaction = { ...input, id: previous.id, createdAt: previous.createdAt }
+      store.transactions[index] = transaction
+      return structuredClone(transaction)
+    },
+    async deleteTransaction(scope, id) {
+      const store = storeFor(scope)
+      const index = store.transactions.findIndex((item) => item.id === id)
+      if (index === -1) return false
+      store.transactions.splice(index, 1)
+      return true
+    },
   }
 }
