@@ -19,7 +19,7 @@ Fluxo: formulários → contexto/serviços → adaptador de mocks.
 - `services/authService.ts`: métodos assíncronos, validação defensiva, latência de 650 ms e normalização de falhas.
 - `mocks/auth.ts`: contas e sessão em memória, acesso fictício e comparação demonstrativa de senhas.
 - `app/AuthProvider.tsx`, `app/AuthContext.ts`, `hooks/useAuth.ts`: estado compartilhado de preparação, visitante e sessão demonstrativa.
-- `hooks/useAuthSubmission.ts`: bloqueio de envios simultâneos, foco no primeiro campo inválido, feedback e cancelamento ao desmontar o formulário.
+- `hooks/useFormSubmission.ts`: bloqueio de envios simultâneos, foco no primeiro campo inválido, feedback e cancelamento ao desmontar o formulário. Na etapa 9, substituiu `useAuthSubmission.ts` e passou a atender também os formulários financeiros.
 - `components/forms`: formulários separados e campo de senha reutilizável.
 - `pages/AuthPage.tsx` e `styles/auth.css`: composição e apresentação responsiva.
 

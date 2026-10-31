@@ -4,7 +4,7 @@ Interface do MVP acadêmico de controle financeiro pessoal, independente de `bac
 
 ## Estado atual
 
-Etapa 8: autenticação visual, dashboard, transações, categorias e relatórios com dados simulados. Relatórios consolida receitas/despesas efetivadas por mês, últimos três meses ou ano, com evolução mensal, distribuição por categoria e pendências separadas. Categorias em uso mantêm exclusão e troca de tipo bloqueadas; a amostra de componentes está em `/componentes` após entrar.
+Etapa 9: interface revisada em responsividade, teclado, contraste e consistência. Login/cadastro, dashboard, transações, categorias e relatórios funcionam com dados simulados. Categorias em uso mantêm exclusão e troca de tipo bloqueadas; a amostra de componentes está em `/componentes` após entrar.
 
 Consulte as decisões e os valores em [Fundação visual](docs/visual-foundation.md).
 Veja as rotas, os componentes e as verificações em [Layout compartilhado](docs/shared-layout.md).
@@ -13,6 +13,7 @@ Veja regras, dados e cenários de revisão em [Visão Geral](docs/dashboard.md).
 Veja filtros, edição, exclusão e cenários de revisão em [Transações](docs/transactions.md).
 Veja regras de integridade, formulário e cenários em [Categorias](docs/categories.md).
 Veja períodos, gráficos e cenários em [Relatórios](docs/reports.md).
+Veja achados, correções e verificações em [Revisão geral](docs/general-review.md).
 
 Acesso fictício: `lucas.mendes@email.com` / `12345678`. A aplicação abre em `/login`. Cadastros, sessão e lançamentos simulados são reiniciados ao recarregar a página; use apenas dados fictícios. O dashboard inicia em outubro de 2024, conforme a referência.
 
@@ -50,6 +51,7 @@ frontend/
 │   ├── api-contract.md
 │   ├── authentication.md
 │   ├── categories.md
+│   ├── general-review.md
 │   ├── reports.md
 │   ├── dashboard.md
 │   ├── shared-layout.md
@@ -121,4 +123,4 @@ A interação das telas é verificada com o Playwright disponível no ambiente, 
 - Metadados visuais extras de categoria são provisórios, sem mudanças no backend.
 - Exportação PDF/CSV, recuperação de senha, orçamento e reserva estão fora do escopo funcional inicial.
 - Dados seguirão páginas/componentes → serviços assíncronos → mocks, depois API. Páginas não importarão mocks diretamente.
-- A etapa 9, Revisão geral, depende de aprovação após revisão de Relatórios.
+- A etapa 10, Testes e validação, depende de aprovação após revisão desta entrega.

@@ -56,4 +56,4 @@ Execute `npm test`, `npm run lint` e `npm run build`. Testes de relatórios cobr
 
 Resultado desta entrega: 84 testes aprovados (12 novos de relatórios), build com TypeScript e lint sem erros. Navegador validado em 320, 375, 768, 1024, 1280 e 1440 px, sem rolagem horizontal da página ou corte de indicadores. Passaram filtros, histórico, ausência de totais obsoletos ao carregar, vazio/erro/repetição, integração com criação de transação, tabela mensal, foco ao aplicar por Enter, rolagem por teclado, nome de categoria com 80 caracteres e valor monetário máximo em 320 px, além da escala com valores de centavos.
 
-A etapa 9, Revisão geral, será iniciada somente após aprovação desta entrega.
+A revisão da etapa 9 está documentada em [Revisão geral](general-review.md), incluindo o ajuste de disposição dos indicadores em larguras intermediárias.
