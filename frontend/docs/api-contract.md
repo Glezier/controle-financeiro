@@ -15,7 +15,7 @@ O perfil de apresentação atual contém `name` e `email`. Identificador do usu�
 
 O serviço do frontend retorna Promises com `{ ok: true, data }` ou `{ ok: false, error: { code, message, fields? } }`. Este é um formato interno de adaptação, não uma exigência de JSON ou códigos HTTP para o backend.
 
-Códigos atuais: `validation`, `invalid_credentials`, `email_exists`, `unavailable`, `cancelled` e `not_found` (transação ausente no escopo solicitado). Nomes de campos, mensagens e mapeamento de respostas HTTP são provisórios. `simulateFailure` e `demoAccess` existem somente para demonstração e não fazem parte de uma API futura.
+Códigos atuais: `validation`, `invalid_credentials`, `email_exists`, `unavailable`, `cancelled`, `not_found` (registro ausente no escopo solicitado), `in_use` (categoria vinculada) e `duplicate` (categoria de mesmo nome/tipo). Nomes de campos, mensagens e mapeamento de respostas HTTP são provisórios. `simulateFailure` e `demoAccess` existem somente para demonstração e não fazem parte de uma API futura.
 
 A confirmação de senha e `acceptedDemo` pertencem apenas à interface. Nenhuma senha ou token é retornado no perfil. Não há definição de JWT, refresh token, cookies, headers de autenticação ou persistência no cliente nesta etapa.
 
@@ -41,9 +41,9 @@ Os nomes, endpoints e verbos HTTP não estão definidos. O formato `FinanceResul
 
 `Transaction` usa `id`, `categoryId`, `type`, `amountCents`, `date`, `description`, `status` e `createdAt`. `amountCents` representa um inteiro interno do frontend; o campo `amount numeric(12,2)` do backend será convertido pelo adaptador, após alinhamento do formato JSON decimal. Datas financeiras permanecerão `YYYY-MM-DD`, enquanto `createdAt` representa um timestamp.
 
-Categorias têm identificador, nome e tipo. `appearance` (ícone/cor) é metadado demonstrativo opcional; não existe no schema e não exige alteração do backend. Respostas de dashboard e períodos são modelos de apresentação provisórios; a equipe pode disponibilizar agregações no servidor com outro formato, preservando as regras documentadas.
+Categorias têm identificador, nome e tipo. `appearance` (ícone/cor/descrição visual) é metadado demonstrativo opcional; não existe no schema e não exige alteração do backend. Respostas de dashboard e períodos são modelos de apresentação provisórios; a equipe pode disponibilizar agregações no servidor com outro formato, preservando as regras documentadas.
 
-Pendências não entram no saldo disponível nem na distribuição de despesas efetivadas. Categoria obrigatória, do mesmo usuário e tipo, e valor positivo são regras existentes no contexto/schema. O limite de 200 caracteres da descrição é uma decisão provisória do cliente. Contratos de categorias e relatórios serão alinhados em suas etapas.
+Pendências não entram no saldo disponível nem na distribuição de despesas efetivadas. Categoria obrigatória, do mesmo usuário e tipo, e valor positivo são regras existentes no contexto/schema. O limite de 200 caracteres da descrição é uma decisão provisória do cliente. Contratos de relatórios serão alinhados em sua etapa.
 
 A futura URL da API será configurada por variável de ambiente com `.env.example` quando houver chamadas HTTP. Nenhuma URL privada ou credencial real é necessária para a simulação atual.
 
@@ -64,3 +64,22 @@ Edição e exclusão verificam a propriedade do lançamento no adaptador. A edi�
 Após salvar, a interface seleciona o mês do lançamento e limpa os demais filtros. Após excluir, mantém filtros e ajusta a página quando necessário. Essas decisões da interface não exigem comportamento equivalente do servidor. Cancelar/fechar um modal aborta uma operação simulada ainda na latência; em uma integração real, cancelar a requisição não garante reversão de uma escrita já processada pelo servidor.
 
 Ainda é necessário acordar paginação/ordenação do servidor, normalização da busca, agregações sobre o conjunto filtrado, confirmação de exclusão, tratamento de registros concorrentes e mapeamento de erros/autorização. Nenhum endpoint de transações é presumido como existente ou foi implementado nesta etapa.
+
+## Categorias — etapa 7
+
+| Operação interna | Entrada atual | Resultado necessário para a interface |
+| --- | --- | --- |
+| `getCategories` | Proprietário do mock | Categorias com `transactionCount`, total e contagens por tipo |
+| `createCategory` | Proprietário do mock e `CategoryDraft` | Categoria criada ou erro global/por campo |
+| `updateCategory` | Proprietário do mock, UUID e `CategoryDraft` completo | Categoria atualizada mantendo o UUID ou erro |
+| `deleteCategory` | Proprietário do mock e UUID | `{ ok: true, data: null }` ou erro; bloqueia qualquer vínculo |
+
+`CategoryDraft` contém `name`, `type`, `description`, `color` e `icon`. Somente nome e tipo correspondem a campos editáveis previstos no schema atual. Descrição, cor e ícone são agrupados em `appearance` no modelo de apresentação e existem exclusivamente no mock; não devem ser enviados à API como campos presumidos. O frontend atual não precisa do timestamp de criação da categoria.
+
+Nome é obrigatório, aparado nas extremidades e limitado provisoriamente a 80 caracteres. A descrição visual é opcional e limitada a 160. Ícone e cor vêm de uma lista fechada local. A unicidade simulada compara o nome aparado exatamente, por usuário e tipo, respeitando caixa e acentos; a normalização definitiva deve ser acordada com o backend. O mesmo nome em tipos distintos é permitido.
+
+`transactionCount` é uma agregação provisória de todos os vínculos do usuário, sem filtro de período ou situação. É necessário obtê-la do servidor na integração, ou um indicador confiável equivalente. A interface usa essa informação para desabilitar a exclusão e a troca de tipo. O adaptador revalida os vínculos no momento da escrita, inclusive se uma transação pendente for criada depois da leitura.
+
+As restrições refletem o schema inspecionado: relação composta categoria/usuário/tipo com `onDelete: Restrict` e `onUpdate: Restrict`. Renomear preserva o UUID e as transações, atualizando suas identificações. Nenhuma operação remove categoria de transações ou altera automaticamente seu tipo. Categorias sem vínculos podem mudar de tipo ou ser excluídas.
+
+`categoryService` e `financeService` compartilham a mesma instância de dados em memória; testes podem injetar adaptadores isolados. O e-mail de escopo continua exclusivo do mock. Os métodos retornam Promises com latência, cancelamento e erros tipados internos; nenhum endpoint, payload HTTP ou código de resposta é definido aqui como contrato definitivo. URLs, autorização real, agregações, unicidade e tratamento de concorrência permanecem pontos de alinhamento.

@@ -1,5 +1,7 @@
 # Transações — etapa 6
 
+Registro da etapa 6. Na [etapa 7](categories.md), a gestão de categorias foi implementada sobre o mesmo adaptador, com renomeação refletida nos lançamentos e exclusão/troca de tipo bloqueadas enquanto houver vínculos.
+
 ## Escopo
 
 Rota protegida `/transacoes`, acessível pelo menu após o login fictício. Usa o mesmo livro de lançamentos do dashboard. Não há chamadas HTTP, persistência, exportação ou alterações no backend. Nenhuma dependência foi adicionada.
@@ -43,4 +45,4 @@ Verificação visual e funcional com Edge headless/Playwright do ambiente, sem d
 
 Diferenças intencionais da exportação: marca e ícones SVG íntegros; exportação omitida; labels de filtros visíveis; ordenação consistente com o dashboard; dados coerentes entre telas; pendências identificadas em âmbar; ações com alvo e nome acessíveis; quatro indicadores em telas largas e grid de duas/uma coluna nas demais; tabela com rolagem interna no celular. A data do cabeçalho permanece a data atual e os dados fictícios permanecem em 2024. Não há fluxos de orçamento, reserva ou recuperação de senha.
 
-Categorias e Relatórios continuam reservados às próximas etapas. O contrato de integração permanece provisório em [api-contract.md](api-contract.md).
+Categorias está documentado em [categories.md](categories.md); Relatórios permanece reservado à próxima etapa. O contrato de integração permanece provisório em [api-contract.md](api-contract.md).

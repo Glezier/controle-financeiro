@@ -4,13 +4,14 @@ Interface do MVP acadêmico de controle financeiro pessoal, independente de `bac
 
 ## Estado atual
 
-Etapa 6: autenticação visual, dashboard e gestão de transações com dados simulados. A página de Transações permite buscar, filtrar, paginar, criar, editar, consultar detalhes e excluir com confirmação. Categorias e Relatórios ainda exibem espaços reservados; a amostra de componentes está em `/componentes` após entrar.
+Etapa 7: autenticação visual, dashboard, transações e categorias com dados simulados. A tela de Categorias permite cadastrar, editar e excluir registros sem vínculos; categorias em uso têm exclusão e troca de tipo bloqueadas. Relatórios ainda exibe um espaço reservado; a amostra de componentes está em `/componentes` após entrar.
 
 Consulte as decisões e os valores em [Fundação visual](docs/visual-foundation.md).
 Veja as rotas, os componentes e as verificações em [Layout compartilhado](docs/shared-layout.md).
 O fluxo atual está em [Autenticação visual](docs/authentication.md); expectativas da integração estão no [Contrato provisório](docs/api-contract.md).
 Veja regras, dados e cenários de revisão em [Visão Geral](docs/dashboard.md).
 Veja filtros, edição, exclusão e cenários de revisão em [Transações](docs/transactions.md).
+Veja regras de integridade, formulário e cenários em [Categorias](docs/categories.md).
 
 Acesso fictício: `lucas.mendes@email.com` / `12345678`. A aplicação abre em `/login`. Cadastros, sessão e lançamentos simulados são reiniciados ao recarregar a página; use apenas dados fictícios. O dashboard inicia em outubro de 2024, conforme a referência.
 
@@ -47,6 +48,7 @@ frontend/
 ├── docs/
 │   ├── api-contract.md
 │   ├── authentication.md
+│   ├── categories.md
 │   ├── dashboard.md
 │   ├── shared-layout.md
 │   ├── transactions.md
@@ -55,6 +57,7 @@ frontend/
 │   ├── app/
 │   ├── components/
 │   │   ├── dashboard/
+│   │   ├── categories/
 │   │   ├── feedback/
 │   │   ├── forms/
 │   │   ├── layout/
@@ -69,6 +72,7 @@ frontend/
 │   ├── types/
 │   ├── styles/
 │   │   ├── auth.css
+│   │   ├── categories.css
 │   │   ├── components.css
 │   │   ├── dashboard.css
 │   │   ├── global.css
@@ -113,4 +117,4 @@ A interação das telas é verificada com o Playwright disponível no ambiente, 
 - Metadados visuais extras de categoria serão provisórios, sem mudanças no backend.
 - Exportação PDF/CSV, recuperação de senha, orçamento e reserva estão fora do escopo funcional inicial.
 - Dados seguirão páginas/componentes → serviços assíncronos → mocks, depois API. Páginas não importarão mocks diretamente.
-- A etapa 7, Categorias, depende de aprovação após revisão de Transações. A exclusão de categorias em uso deverá ser bloqueada.
+- A etapa 8, Relatórios, depende de aprovação após revisão de Categorias.
