@@ -1,6 +1,6 @@
 import { useId, useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { useAuthSubmission } from '../../hooks/useAuthSubmission'
+import { useFormSubmission } from '../../hooks/useFormSubmission'
 import type { UserProfile } from '../../types/profile'
 import { registrationSchema } from '../../utils/authValidation'
 import { Feedback } from '../feedback/Feedback'
@@ -19,7 +19,7 @@ export function RegisterForm({ onSuccess }: { onSuccess: (user: UserProfile) => 
     confirmPassword: '',
     acceptedDemo: false,
   })
-  const { formRef, busy, errors, failure, submit } = useAuthSubmission(
+  const { formRef, busy, errors, failure, submit } = useFormSubmission(
     registrationSchema,
     signUp,
     onSuccess,

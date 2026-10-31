@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useFormSubmission } from '../../hooks/useFormSubmission'
+import { useState } from 'react'
 import type { Category, Transaction, TransactionDraft, TransactionType } from '../../types/finance'
 import { amountInputValue } from '../../utils/financeFormat'
 import { financeService } from '../../services/financeService'
-import { transactionFieldErrors, transactionSchema } from '../../utils/transactionValidation'
+import { transactionSchema } from '../../utils/transactionValidation'
 import { Feedback } from '../feedback/Feedback'
 import { Button } from '../ui/Button'
 import { Icon } from '../ui/Icon'
@@ -46,50 +47,16 @@ export function TransactionForm({
           status: 'paid',
         },
   )
-  const [busy, setBusy] = useState(false)
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [failure, setFailure] = useState('')
-  const controller = useRef<AbortController | null>(null)
-  const formRef = useRef<HTMLFormElement>(null)
-  useEffect(() => () => controller.current?.abort(), [])
-  useEffect(() => {
-    if (Object.keys(errors).length)
-      formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
-  }, [errors])
+  const { formRef, busy, errors, failure, submit } = useFormSubmission(
+    transactionSchema,
+    (input, options) =>
+      initialTransaction
+        ? financeService.updateTransaction(scope, initialTransaction.id, input, options)
+        : financeService.createTransaction(scope, input, options),
+    onSaved,
+    'Não foi possível salvar a transação. Tente novamente.',
+  )
   const compatibleCategories = categories.filter((category) => category.type === values.type)
-
-  async function submit() {
-    if (controller.current) return
-    setFailure('')
-    const parsed = transactionSchema.safeParse(values)
-    if (!parsed.success) {
-      setErrors(transactionFieldErrors(parsed.error.issues))
-      return
-    }
-    setErrors({})
-    const request = new AbortController()
-    controller.current = request
-    setBusy(true)
-    try {
-      const result = initialTransaction
-        ? await financeService.updateTransaction(scope, initialTransaction.id, parsed.data, {
-            signal: request.signal,
-          })
-        : await financeService.createTransaction(scope, parsed.data, { signal: request.signal })
-      if (request.signal.aborted) return
-      if (result.ok) onSaved(result.data)
-      else {
-        setFailure(result.error.message)
-        if (result.error.fields) setErrors(result.error.fields)
-      }
-    } catch {
-      if (!request.signal.aborted)
-        setFailure('Não foi possível salvar a transação. Tente novamente.')
-    } finally {
-      controller.current = null
-      if (!request.signal.aborted) setBusy(false)
-    }
-  }
 
   return (
     <form
@@ -100,7 +67,7 @@ export function TransactionForm({
       noValidate
       onSubmit={(event) => {
         event.preventDefault()
-        void submit()
+        void submit(values)
       }}
     >
       {failure && (

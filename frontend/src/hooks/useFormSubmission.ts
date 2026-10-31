@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import type { z } from 'zod'
-import type { AuthRequestOptions, AuthResult } from '../types/auth'
-import type { UserProfile } from '../types/profile'
-import { authFieldErrors } from '../utils/authValidation'
 
-export function useAuthSubmission<T>(
+type SubmissionOptions = { signal?: AbortSignal; simulateFailure?: boolean }
+type SubmissionResult<Data> =
+  | { ok: true; data: Data }
+  | { ok: false; error: { message: string; fields?: Record<string, string> } }
+
+export function useFormSubmission<T, Data>(
   schema: z.ZodType<T>,
-  action: (input: T, options?: AuthRequestOptions) => Promise<AuthResult<UserProfile>>,
-  onSuccess?: (user: UserProfile) => void,
+  action: (input: T, options?: SubmissionOptions) => Promise<SubmissionResult<Data>>,
+  onSuccess?: (data: Data) => void,
+  failureMessage = 'Não foi possível concluir a operação. Tente novamente.',
 ) {
   const formRef = useRef<HTMLFormElement>(null)
   const controller = useRef<AbortController | null>(null)
@@ -20,12 +23,17 @@ export function useAuthSubmission<T>(
       formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
   }, [errors])
 
-  async function submit(input: T, simulateFailure = false) {
+  async function submit(input: unknown, simulateFailure = false) {
     if (controller.current) return
     setFailure('')
     const parsed = schema.safeParse(input)
     if (!parsed.success) {
-      setErrors(authFieldErrors(parsed.error.issues))
+      const fields: Record<string, string> = {}
+      for (const issue of parsed.error.issues) {
+        const name = issue.path[0]
+        if (typeof name === 'string' && !fields[name]) fields[name] = issue.message
+      }
+      setErrors(fields)
       return
     }
     setErrors({})
@@ -41,8 +49,7 @@ export function useAuthSubmission<T>(
         if (result.error.fields) setErrors(result.error.fields)
       }
     } catch {
-      if (!request.signal.aborted)
-        setFailure('Não foi possível concluir a operação. Tente novamente.')
+      if (!request.signal.aborted) setFailure(failureMessage)
     } finally {
       controller.current = null
       if (!request.signal.aborted) setBusy(false)

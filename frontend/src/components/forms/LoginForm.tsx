@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { useAuthSubmission } from '../../hooks/useAuthSubmission'
+import { useFormSubmission } from '../../hooks/useFormSubmission'
 import { demoAccess } from '../../services/authService'
 import { loginSchema } from '../../utils/authValidation'
 import { Feedback } from '../feedback/Feedback'
@@ -15,7 +15,7 @@ export function LoginForm({ initialEmail }: { initialEmail?: string }) {
     email: initialEmail ?? demoAccess.email,
     password: initialEmail ? '' : demoAccess.password,
   })
-  const { formRef, busy, errors, failure, submit } = useAuthSubmission(loginSchema, signIn)
+  const { formRef, busy, errors, failure, submit } = useFormSubmission(loginSchema, signIn)
   return (
     <form
       ref={formRef}

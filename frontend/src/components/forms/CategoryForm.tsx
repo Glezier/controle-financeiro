@@ -1,12 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useFormSubmission } from '../../hooks/useFormSubmission'
+import { useEffect, useState } from 'react'
 import type { Category, CategoryDraft, CategoryView } from '../../types/finance'
 import { categoryService } from '../../services/categoryService'
-import {
-  categoryColors,
-  categoryFieldErrors,
-  categoryIcons,
-  categorySchema,
-} from '../../utils/categoryValidation'
+import { categoryColors, categoryIcons, categorySchema } from '../../utils/categoryValidation'
 import { Feedback } from '../feedback/Feedback'
 import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
@@ -34,53 +30,21 @@ export function CategoryForm({
     color: category?.appearance?.color ?? categoryColors[0].value,
     icon: category?.appearance?.icon ?? 'home',
   })
-  const [busy, setBusy] = useState(false)
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [failure, setFailure] = useState('')
-  const controller = useRef<AbortController | null>(null)
-  const formRef = useRef<HTMLFormElement>(null)
-  useEffect(() => () => controller.current?.abort(), [])
+  const { formRef, busy, errors, failure, submit } = useFormSubmission(
+    categorySchema,
+    (input, options) =>
+      category
+        ? categoryService.updateCategory(scope, category.id, input, options)
+        : categoryService.createCategory(scope, input, options),
+    onSaved,
+    'Não foi possível salvar a categoria. Tente novamente.',
+  )
   useEffect(() => {
     if (focusOnMount)
       formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus()
-  }, [focusOnMount])
-  useEffect(() => {
-    if (Object.keys(errors).length)
-      formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
-  }, [errors])
+  }, [focusOnMount, formRef])
   const inUse = (category?.transactionCount ?? 0) > 0
-  async function submit() {
-    if (controller.current) return
-    setFailure('')
-    const parsed = categorySchema.safeParse(values)
-    if (!parsed.success) {
-      setErrors(categoryFieldErrors(parsed.error.issues))
-      return
-    }
-    setErrors({})
-    const request = new AbortController()
-    controller.current = request
-    setBusy(true)
-    try {
-      const result = category
-        ? await categoryService.updateCategory(scope, category.id, parsed.data, {
-            signal: request.signal,
-          })
-        : await categoryService.createCategory(scope, parsed.data, { signal: request.signal })
-      if (request.signal.aborted) return
-      if (result.ok) onSaved(result.data)
-      else {
-        setFailure(result.error.message)
-        if (result.error.fields) setErrors(result.error.fields)
-      }
-    } catch {
-      if (!request.signal.aborted)
-        setFailure('Não foi possível salvar a categoria. Tente novamente.')
-    } finally {
-      controller.current = null
-      if (!request.signal.aborted) setBusy(false)
-    }
-  }
+
   return (
     <Card className="category-form-card">
       <div className="category-panel-heading">
@@ -98,7 +62,7 @@ export function CategoryForm({
         noValidate
         onSubmit={(event) => {
           event.preventDefault()
-          void submit()
+          void submit(values)
         }}
       >
         {failure && (
