@@ -144,6 +144,7 @@
     font-size: var(--text-caption);
   }
   .app-main {
+    container: financial-content / inline-size;
     padding: var(--layout-gutter);
     max-width: var(--container-content);
     margin-inline: auto;
