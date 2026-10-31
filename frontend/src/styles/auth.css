@@ -79,7 +79,7 @@
   .auth-form .ui-field input {
     background: var(--color-surface-subtle);
     box-shadow: inset 0 1px 2px rgb(19 27 46 / 5%);
-    border-color: transparent;
+    border-color: var(--color-ink-muted);
   }
   .auth-form .ui-field input:focus {
     background: var(--color-surface);
