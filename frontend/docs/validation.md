@@ -87,5 +87,5 @@ Essa cadeia já existia antes da adição do Playwright. A sugestão automática
 - O diff desta entrega está restrito a `frontend/`; backend e referências não fazem parte das alterações.
 - Dados, sessão e cadastros continuam em memória. Integração real e autenticação no servidor não fazem parte desta entrega.
 - Exportação PDF/CSV, recuperação de senha, orçamento e reserva financeira continuam fora do escopo funcional.
-- Relatórios/capturas gerados não entram no commit. `references/` permanece como conteúdo local não rastreado.
-- Descrição sugerida do PR disponível em [pull-request.md](pull-request.md). Nenhum push ou PR foi executado nesta etapa.
+- Relatórios/capturas gerados não entram no commit. A pasta local `references/`, que não continha arquivos versionados, foi removida após a validação por autorização do mantenedor. Sua remoção não altera o diff do PR.
+- Texto em português para publicação do PR disponível em [pull-request.md](pull-request.md). Os resultados acima registram a validação realizada antes da publicação.

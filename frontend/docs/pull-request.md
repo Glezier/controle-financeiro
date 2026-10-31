@@ -4,23 +4,23 @@ Base pretendida: `main`. Branch: `frontend-implementation`.
 
 ## Título
 
-`feat: implement financial control frontend`
+`feat: implementar frontend do controle financeiro`
 
 ## Descrição
 
-Add an independent React/TypeScript frontend for the financial control system, with visual authentication, a dashboard, transaction management, category management and financial reports. Screens follow the Stitch references, with reusable components, responsive layouts and keyboard navigation.
+Implementa o frontend independente do Controle Financeiro em React e TypeScript, com autenticação visual, Visão Geral, gerenciamento de transações e categorias e relatórios financeiros. As telas seguem as referências do Stitch, com componentes reutilizáveis, layouts responsivos e navegação por teclado.
 
-Transactions and categories share an asynchronous service layer backed by isolated in-memory data. Paid income and expenses determine balances and charts; pending movements remain separate. Categories with linked transactions cannot be deleted or change type, while renaming preserves their history. Frontend API expectations remain provisional.
+Transações e categorias compartilham uma camada de serviços assíncronos com dados simulados e isolados em memória. Receitas e despesas efetivadas determinam saldos e gráficos; pendências são apresentadas separadamente. Categorias vinculadas a transações não podem ser excluídas nem mudar de tipo, e a renomeação preserva o histórico. As expectativas de integração com a API permanecem provisórias.
 
-Validation:
+Validação:
 
-- `npm run build` and `npm run lint` pass.
-- 84 Vitest tests pass for validation, services, ownership and financial rules.
-- 24 Playwright tests pass against the production build in Edge headless.
-- Six screens checked at 320, 768 and 1440 px; 19 local captures support the documented visual comparison.
-- JavaScript page exceptions are checked by the E2E suite.
-- Production dependency audit reports zero alerts. The existing ESLint/minimatch development-tooling advisory is documented in `frontend/docs/validation.md`.
+- `npm run build` e `npm run lint` aprovados.
+- 84 testes Vitest aprovados para validação, serviços, isolamento de dados e regras financeiras.
+- 24 testes Playwright aprovados sobre o build de produção no Edge headless.
+- Seis telas conferidas em 320, 768 e 1440 px; 19 capturas locais apoiam a comparação visual documentada.
+- A suíte E2E verifica exceções JavaScript das páginas.
+- Auditoria de dependências de produção sem alertas. A ressalva existente no tooling ESLint/minimatch está documentada em `frontend/docs/validation.md`.
 
-Backend and reference files are unchanged. Authentication and financial data are simulated and reset on reload; no real API, server authentication, PDF/CSV export, password recovery, budget or reserve workflow is included.
+O backend foi preservado. As referências visuais foram utilizadas para consulta e não fazem parte do diff versionado. Autenticação e dados financeiros são simulados e reiniciados ao recarregar a página; a entrega não inclui integração real com a API, autenticação no servidor, exportação PDF/CSV, recuperação de senha, orçamento ou reserva financeira.
 
-See `frontend/README.md` for setup and `frontend/docs/validation.md` for test reproduction, visual differences, generated artifacts and limitations.
+Consulte `frontend/README.md` para execução e `frontend/docs/validation.md` para reprodução dos testes, diferenças visuais, artefatos gerados e limitações.

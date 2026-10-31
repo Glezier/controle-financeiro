@@ -126,7 +126,7 @@ A suíte conta com 84 testes Vitest e 24 testes Playwright aprovados. Para prepa
 
 ## Limites e próxima etapa
 
-- `references/` é somente leitura; as exportações do Stitch orientam o visual.
+- As exportações do Stitch foram consultadas sem alterações durante a implementação. A pasta local `references/`, não versionada, foi removida após a validação por decisão do mantenedor.
 - Documentação e schema prevalecem sobre comportamentos demonstrativos inconsistentes.
 - Metadados visuais extras de categoria são provisórios, sem mudanças no backend.
 - Exportação PDF/CSV, recuperação de senha, orçamento e reserva estão fora do escopo funcional inicial.
