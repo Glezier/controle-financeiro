@@ -8,9 +8,11 @@ import { Icon } from '../ui/Icon'
 export function ExpensesChart({
   items,
   totalCents,
+  title = 'Despesas por Categoria',
 }: {
   items: CategoryExpense[]
   totalCents: number
+  title?: string
 }) {
   let offset = 0
   const segments: (CategoryExpense & { offset: number })[] = []
@@ -24,7 +26,7 @@ export function ExpensesChart({
       <div className="dashboard-panel-heading">
         <h2>
           <Icon name="pie" />
-          Despesas por Categoria
+          {title}
         </h2>
       </div>
       {totalCents === 0 ? (

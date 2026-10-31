@@ -6,10 +6,10 @@ import { AuthPage } from '../pages/AuthPage'
 import { Feedback } from '../components/feedback/Feedback'
 import { useAuth } from '../hooks/useAuth'
 import { authReturnPath } from '../utils/authValidation'
-import { navigation } from './navigation'
 import { DashboardPage } from '../pages/DashboardPage'
 import { TransactionsPage } from '../pages/TransactionsPage'
 import { CategoriesPage } from '../pages/CategoriesPage'
+import { ReportsPage } from '../pages/ReportsPage'
 
 export function AppRoutes() {
   const { state } = useAuth()
@@ -62,15 +62,7 @@ export function AppRoutes() {
         <Route path="/visao-geral" element={<DashboardPage />} />
         <Route path="/transacoes" element={<TransactionsPage />} />
         <Route path="/categorias" element={<CategoriesPage />} />
-        {navigation
-          .filter((item) => item.path === '/relatorios')
-          .map((item) => (
-            <Route
-              key={item.path}
-              path={item.path}
-              element={<PlaceholderPage title={item.label} description={item.description} />}
-            />
-          ))}
+        <Route path="/relatorios" element={<ReportsPage />} />
         <Route path="/componentes" element={<ComponentsPreview />} />
         <Route
           path="*"

@@ -7,11 +7,12 @@ import type { IconName } from '../ui/Icon'
 
 export function FinancialSummary({
   summary,
-  showPending = false,
+  variant = 'dashboard',
 }: {
   summary: DashboardSummary
-  showPending?: boolean
+  variant?: 'dashboard' | 'transactions' | 'report'
 }) {
+  const showPending = variant === 'transactions'
   const cards: {
     title: string
     value: string
@@ -21,7 +22,11 @@ export function FinancialSummary({
     received?: boolean
   }[] = [
     {
-      title: showPending ? 'Saldo dos resultados' : 'Saldo Disponível',
+      title: showPending
+        ? 'Saldo dos resultados'
+        : variant === 'report'
+          ? 'Resultado Líquido'
+          : 'Saldo Disponível',
       value: formatMoney(summary.balanceCents),
       icon: 'wallet',
       tone: summary.balanceCents < 0 ? 'expense' : 'balance',
@@ -35,7 +40,8 @@ export function FinancialSummary({
       icon: 'arrowDown',
       tone: 'income',
       detail: `${summary.paidIncomeCount} ${summary.paidIncomeCount === 1 ? 'receita efetivada' : 'receitas efetivadas'} no período.`,
-      received: !showPending && summary.incomeCents > 0 && summary.pendingIncomeCents === 0,
+      received:
+        variant === 'dashboard' && summary.incomeCents > 0 && summary.pendingIncomeCents === 0,
     },
     {
       title: 'Despesas Efetivadas',
@@ -52,11 +58,15 @@ export function FinancialSummary({
     tone: 'pending',
     detail: `Receitas pendentes: ${formatMoney(summary.pendingIncomeCents)}. ${summary.pendingCount} ${summary.pendingCount === 1 ? 'lançamento pendente' : 'lançamentos pendentes'}.`,
   }
-  const displayedCards = showPending ? [cards[1], cards[2], pending, cards[0]] : cards
+  const displayedCards = showPending
+    ? [cards[1], cards[2], pending, cards[0]]
+    : variant === 'report'
+      ? [cards[1], cards[2], cards[0]]
+      : cards
   return (
     <section
       aria-label="Resumo financeiro"
-      className={`dashboard-summary${showPending ? ' transaction-summary' : ''}`}
+      className={`dashboard-summary${showPending ? ' transaction-summary' : variant === 'report' ? ' report-summary' : ''}`}
     >
       {displayedCards.map((card) => (
         <Card key={card.title} className={`summary-card summary-card--${card.tone}`}>

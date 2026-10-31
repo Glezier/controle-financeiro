@@ -124,7 +124,7 @@ export function TransactionsPage() {
       </Card>
       {state.status === 'success' && (
         <div>
-          <FinancialSummary summary={state.data.summary} showPending />
+          <FinancialSummary summary={state.data.summary} variant="transactions" />
           <p className="mt-space-sm text-caption text-ink-secondary">
             Indicadores de todos os resultados filtrados, antes da paginação.{' '}
             {query.period === 'all' ? 'Todo o período.' : formatPeriod(query.period)} · Da data mais
