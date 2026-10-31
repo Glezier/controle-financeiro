@@ -1,5 +1,9 @@
 import type { Category, DashboardSnapshot, Transaction, TransactionView } from '../types/finance'
-import { availableFinancialPeriods, summarizeTransactions } from './financialSummary'
+import {
+  availableFinancialPeriods,
+  summarizeTransactions,
+  summarizeExpenses,
+} from './financialSummary'
 
 export function summarizeDashboard(
   categories: Category[],
@@ -15,25 +19,8 @@ export function summarizeDashboard(
       if (!category) throw new Error('Transaction category is missing or inconsistent')
       return { ...item, category }
     })
-  const paidExpenses = filtered.filter((item) => item.type === 'expense' && item.status === 'paid')
-  const sum = (items: Transaction[]) => items.reduce((total, item) => total + item.amountCents, 0)
   const summary = summarizeTransactions(filtered)
-  const { expenseCents } = summary
-  const expensesByCategory = categories
-    .filter((item) => item.type === 'expense')
-    .map((category) => {
-      const amountCents = sum(paidExpenses.filter((item) => item.categoryId === category.id))
-      return {
-        category,
-        amountCents,
-        percentage: expenseCents ? (amountCents / expenseCents) * 100 : 0,
-      }
-    })
-    .filter((item) => item.amountCents > 0)
-    .sort(
-      (a, b) =>
-        b.amountCents - a.amountCents || a.category.name.localeCompare(b.category.name, 'pt-BR'),
-    )
+  const expensesByCategory = summarizeExpenses(categories, filtered)
 
   return structuredClone({
     period,

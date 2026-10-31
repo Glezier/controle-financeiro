@@ -1,4 +1,4 @@
-import type { DashboardSummary, Transaction } from '../types/finance'
+import type { Category, CategoryExpense, DashboardSummary, Transaction } from '../types/finance'
 import { isFinancialPeriod } from './financeFormat'
 
 export function summarizeTransactions(transactions: Transaction[]): DashboardSummary {
@@ -33,4 +33,32 @@ export function availableFinancialPeriods(transactions: Transaction[], selected:
   )
     .sort()
     .reverse()
+}
+
+export function summarizeExpenses(
+  categories: Category[],
+  transactions: Transaction[],
+): CategoryExpense[] {
+  const sum = (items: Transaction[]) => items.reduce((total, item) => total + item.amountCents, 0)
+  const expenseCents = summarizeTransactions(transactions).expenseCents
+  return categories
+    .filter((item) => item.type === 'expense')
+    .map((category) => {
+      const amountCents = sum(
+        transactions.filter(
+          (item) =>
+            item.categoryId === category.id && item.type === 'expense' && item.status === 'paid',
+        ),
+      )
+      return {
+        category,
+        amountCents,
+        percentage: expenseCents ? (amountCents / expenseCents) * 100 : 0,
+      }
+    })
+    .filter((item) => item.amountCents > 0)
+    .sort(
+      (a, b) =>
+        b.amountCents - a.amountCents || a.category.name.localeCompare(b.category.name, 'pt-BR'),
+    )
 }
