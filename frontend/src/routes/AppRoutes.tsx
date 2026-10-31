@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AppLayout } from '../components/layout/AppLayout'
 import { ComponentsPreview } from '../pages/ComponentsPreview'
-import { PlaceholderPage } from '../pages/PlaceholderPage'
+import { NotFoundPage } from '../pages/NotFoundPage'
 import { AuthPage } from '../pages/AuthPage'
 import { Feedback } from '../components/feedback/Feedback'
 import { useAuth } from '../hooks/useAuth'
@@ -64,15 +64,7 @@ export function AppRoutes() {
         <Route path="/categorias" element={<CategoriesPage />} />
         <Route path="/relatorios" element={<ReportsPage />} />
         <Route path="/componentes" element={<ComponentsPreview />} />
-        <Route
-          path="*"
-          element={
-            <PlaceholderPage
-              title="Página não encontrada"
-              description="O endereço solicitado não está disponível. Use o menu para continuar."
-            />
-          }
-        />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   )
