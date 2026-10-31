@@ -4,7 +4,7 @@ Interface do MVP acadêmico de controle financeiro pessoal, independente de `bac
 
 ## Estado atual
 
-Etapa 9: interface revisada em responsividade, teclado, contraste e consistência. Login/cadastro, dashboard, transações, categorias e relatórios funcionam com dados simulados. Categorias em uso mantêm exclusão e troca de tipo bloqueadas; a amostra de componentes está em `/componentes` após entrar.
+Etapa 10: implementação e validação do frontend com dados simulados concluídas. Login/cadastro, dashboard, transações, categorias e relatórios possuem serviços separados, componentes reutilizáveis e testes. Categorias em uso mantêm exclusão e troca de tipo bloqueadas; a amostra de componentes está em `/componentes` após entrar.
 
 Consulte as decisões e os valores em [Fundação visual](docs/visual-foundation.md).
 Veja as rotas, os componentes e as verificações em [Layout compartilhado](docs/shared-layout.md).
@@ -14,6 +14,7 @@ Veja filtros, edição, exclusão e cenários de revisão em [Transações](docs
 Veja regras de integridade, formulário e cenários em [Categorias](docs/categories.md).
 Veja períodos, gráficos e cenários em [Relatórios](docs/reports.md).
 Veja achados, correções e verificações em [Revisão geral](docs/general-review.md).
+Veja resultados, reprodução dos testes, comparação visual e ressalvas em [Testes e validação](docs/validation.md).
 
 Acesso fictício: `lucas.mendes@email.com` / `12345678`. A aplicação abre em `/login`. Cadastros, sessão e lançamentos simulados são reiniciados ao recarregar a página; use apenas dados fictícios. O dashboard inicia em outubro de 2024, conforme a referência.
 
@@ -42,8 +43,9 @@ Abra a URL exibida pelo Vite (normalmente http://localhost:5173). O backend e va
 | `npm run preview` | Prévia local; requer build anterior |
 | `npm test` | Testes de autenticação, validação financeira e serviços simulados |
 | `npm run test:watch` | Testes em modo de observação |
+| `npm run test:e2e` | Build de produção e testes de navegador; requer Chromium do Playwright ou canal instalado |
 
-## Estrutura inicial
+## Estrutura
 
 ```text
 frontend/
@@ -52,6 +54,8 @@ frontend/
 │   ├── authentication.md
 │   ├── categories.md
 │   ├── general-review.md
+│   ├── validation.md
+│   ├── pull-request.md
 │   ├── reports.md
 │   ├── dashboard.md
 │   ├── shared-layout.md
@@ -90,6 +94,7 @@ frontend/
 │   └── main.tsx
 ├── .gitignore
 ├── tests/
+│   └── e2e/
 ├── eslint.config.js
 ├── index.html
 ├── package.json
@@ -99,6 +104,8 @@ frontend/
 ├── tsconfig.node.json
 ├── vite.config.ts
 ├── vitest.config.ts
+├── playwright.config.ts
+├── tsconfig.e2e.json
 └── README.md
 ```
 
@@ -113,8 +120,9 @@ frontend/
 - ESLint, @eslint/js, typescript-eslint, plugins de hooks/React Refresh e globals: análise estática do código e das configurações.
 - Zod: validação de formulários e entradas dos serviços de autenticação/transações.
 - Vitest 4: testes de validação e serviços simulados, incluindo valores financeiros, cancelamento e sessão.
+- @playwright/test 1.62.1 (desenvolvimento): testes reproduzíveis de rotas, formulários, fluxos financeiros, teclado e responsividade no build de produção.
 
-A interação das telas é verificada com o Playwright disponível no ambiente, sem adicioná-lo às dependências. Não há autenticação real, integração HTTP ou persistência financeira nesta etapa.
+A suíte conta com 84 testes Vitest e 24 testes Playwright aprovados. Para preparar Chromium ou usar Edge/Chrome instalado, consulte [a reprodução dos testes](docs/validation.md). Os artefatos gerados ficam fora dos commits. A auditoria de produção está sem alertas; a ressalva moderada do tooling de lint está registrada no mesmo documento. Não há autenticação real, integração HTTP ou persistência financeira nesta entrega.
 
 ## Limites e próxima etapa
 
@@ -122,5 +130,5 @@ A interação das telas é verificada com o Playwright disponível no ambiente, 
 - Documentação e schema prevalecem sobre comportamentos demonstrativos inconsistentes.
 - Metadados visuais extras de categoria são provisórios, sem mudanças no backend.
 - Exportação PDF/CSV, recuperação de senha, orçamento e reserva estão fora do escopo funcional inicial.
-- Dados seguirão páginas/componentes → serviços assíncronos → mocks, depois API. Páginas não importarão mocks diretamente.
-- A etapa 10, Testes e validação, depende de aprovação após revisão desta entrega.
+- Dados seguem páginas/componentes → serviços assíncronos → mocks. Na integração, os serviços passarão a acessar a API; páginas não importam mocks diretamente.
+- Após aprovação desta entrega, os próximos passos de publicação são push da branch e abertura do PR. A descrição sugerida está em [pull-request.md](docs/pull-request.md).

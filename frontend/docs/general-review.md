@@ -43,4 +43,4 @@ Mantidos layout, campos, botões, cards, tabelas, badges, modais, feedback, indi
 
 Para revisar, execute `npm run dev` em `frontend/`, percorra as páginas, teste Tab/Shift+Tab e Escape e alterne larguras de desktop/tablet/celular. Compare os estados vazios e de erro conforme os roteiros das páginas. Recarregar continua reiniciando os dados e a sessão demonstrativa.
 
-A etapa 10 — Testes e validação — permanece pendente de aprovação. Esta entrega revisa a interface e executa verificações pertinentes às correções; não antecipa a aprovação da etapa final.
+A etapa 10 está registrada em [Testes e validação](validation.md), com suíte de navegador reproduzível sobre o build de produção e comparação visual final. As verificações acima registram a entrega original da etapa 9.
