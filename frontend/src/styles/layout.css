@@ -1,4 +1,7 @@
 @layer components {
+  :root:has(.app-shell) {
+    scroll-padding-top: calc(var(--layout-header-height) + 1rem);
+  }
   .app-shell {
     min-height: 100dvh;
   }
