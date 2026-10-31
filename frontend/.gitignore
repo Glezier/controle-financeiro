@@ -12,6 +12,8 @@ dist
 dist-ssr
 .vitest/
 coverage/
+test-results/
+playwright-report/
 *.local
 
 # Editor directories and files
