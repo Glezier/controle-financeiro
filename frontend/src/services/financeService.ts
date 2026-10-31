@@ -1,5 +1,5 @@
 import { financeRequest as request } from './financeRequest'
-import { createMockFinance } from '../mocks/finance'
+import { createMockFinance, mockFinanceAdapter } from '../mocks/finance'
 import { z } from 'zod'
 import type {
   DashboardSnapshot,
@@ -163,4 +163,4 @@ export function createFinanceService(adapter: FinanceAdapter = createMockFinance
   }
 }
 
-export const financeService = createFinanceService()
+export const financeService = createFinanceService(mockFinanceAdapter)

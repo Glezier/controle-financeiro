@@ -9,37 +9,61 @@ function createCategories(): Category[] {
       id: crypto.randomUUID(),
       name: 'Moradia',
       type: 'expense',
-      appearance: { color: 'var(--color-primary)', icon: 'home' },
+      appearance: {
+        color: 'var(--color-primary)',
+        icon: 'home',
+        description: 'Aluguel, condomínio e serviços',
+      },
     },
     {
       id: crypto.randomUUID(),
       name: 'Alimentação',
       type: 'expense',
-      appearance: { color: 'var(--color-income)', icon: 'shopping' },
+      appearance: {
+        color: 'var(--color-income)',
+        icon: 'shopping',
+        description: 'Mercado, feira e lanches',
+      },
     },
     {
       id: crypto.randomUUID(),
       name: 'Transporte',
       type: 'expense',
-      appearance: { color: 'var(--color-primary-accent)', icon: 'transport' },
+      appearance: {
+        color: 'var(--color-primary-accent)',
+        icon: 'transport',
+        description: 'Ônibus, metrô e deslocamentos',
+      },
     },
     {
       id: crypto.randomUUID(),
       name: 'Saúde',
       type: 'expense',
-      appearance: { color: 'var(--color-error)', icon: 'health' },
+      appearance: {
+        color: 'var(--color-error)',
+        icon: 'health',
+        description: 'Farmácia e consultas',
+      },
     },
     {
       id: crypto.randomUUID(),
       name: 'Lazer',
       type: 'expense',
-      appearance: { color: 'var(--color-ink-muted)', icon: 'leisure' },
+      appearance: {
+        color: 'var(--color-ink-muted)',
+        icon: 'leisure',
+        description: 'Livros, cinema e passeios',
+      },
     },
     {
       id: crypto.randomUUID(),
       name: 'Salário & Renda',
       type: 'income',
-      appearance: { color: 'var(--color-income)', icon: 'income' },
+      appearance: {
+        color: 'var(--color-income)',
+        icon: 'income',
+        description: 'Salário, bolsas e renda extra',
+      },
     },
   ]
 }
@@ -93,6 +117,42 @@ export function createMockFinance(): FinanceAdapter {
     return store
   }
   return {
+    async createCategory(scope, input) {
+      const store = storeFor(scope)
+      if (store.categories.some((item) => item.type === input.type && item.name === input.name))
+        return { ok: false, reason: 'duplicate' }
+      const category: Category = { ...structuredClone(input), id: crypto.randomUUID() }
+      store.categories.push(category)
+      return { ok: true, data: structuredClone(category) }
+    },
+    async updateCategory(scope, id, input) {
+      const store = storeFor(scope)
+      const index = store.categories.findIndex((item) => item.id === id)
+      if (index === -1) return { ok: false, reason: 'not_found' }
+      if (
+        store.categories[index].type !== input.type &&
+        store.transactions.some((item) => item.categoryId === id)
+      )
+        return { ok: false, reason: 'in_use' }
+      if (
+        store.categories.some(
+          (item) => item.id !== id && item.type === input.type && item.name === input.name,
+        )
+      )
+        return { ok: false, reason: 'duplicate' }
+      const category: Category = { ...structuredClone(input), id }
+      store.categories[index] = category
+      return { ok: true, data: structuredClone(category) }
+    },
+    async deleteCategory(scope, id) {
+      const store = storeFor(scope)
+      const index = store.categories.findIndex((item) => item.id === id)
+      if (index === -1) return { ok: false, reason: 'not_found' }
+      if (store.transactions.some((item) => item.categoryId === id))
+        return { ok: false, reason: 'in_use' }
+      store.categories.splice(index, 1)
+      return { ok: true, data: null }
+    },
     async listCategories(scope) {
       return structuredClone(storeFor(scope).categories)
     },
@@ -143,3 +203,5 @@ export function createMockFinance(): FinanceAdapter {
     },
   }
 }
+
+export const mockFinanceAdapter = createMockFinance()

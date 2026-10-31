@@ -9,6 +9,7 @@ export interface Category {
   appearance?: {
     color: string
     icon: 'home' | 'shopping' | 'transport' | 'health' | 'leisure' | 'income'
+    description?: string
   }
 }
 
@@ -66,7 +67,7 @@ export type FinanceResult<T> =
   | {
       ok: false
       error: {
-        code: 'validation' | 'unavailable' | 'cancelled' | 'not_found'
+        code: 'validation' | 'unavailable' | 'cancelled' | 'not_found' | 'in_use' | 'duplicate'
         message: string
         fields?: Record<string, string>
       }
@@ -82,6 +83,33 @@ export interface FinanceAdapter {
   createTransaction(scope: string, input: NewTransaction): Promise<Transaction>
   updateTransaction(scope: string, id: string, input: NewTransaction): Promise<Transaction | null>
   deleteTransaction(scope: string, id: string): Promise<boolean>
+  createCategory(scope: string, input: CategoryValues): Promise<CategoryWriteResult<Category>>
+  updateCategory(
+    scope: string,
+    id: string,
+    input: CategoryValues,
+  ): Promise<CategoryWriteResult<Category>>
+  deleteCategory(scope: string, id: string): Promise<CategoryWriteResult<null>>
+}
+
+export type CategoryValues = Pick<Category, 'name' | 'type' | 'appearance'>
+export type CategoryWriteResult<T> =
+  { ok: true; data: T } | { ok: false; reason: 'not_found' | 'in_use' | 'duplicate' }
+export interface CategoryView extends Category {
+  transactionCount: number
+}
+export interface CategorySnapshot {
+  items: CategoryView[]
+  total: number
+  incomeCount: number
+  expenseCount: number
+}
+export interface CategoryDraft {
+  name: string
+  type: TransactionType
+  description: string
+  color: string
+  icon: NonNullable<Category['appearance']>['icon']
 }
 
 export interface TransactionQuery {
