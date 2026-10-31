@@ -42,4 +42,4 @@ Comparação visual com `categorias_gerenciamento/screen.png`, usando screenshot
 
 Diferenças intencionais do Stitch: marca e ícones SVG íntegros; contagens derivadas dos lançamentos; exclusão/troca de tipo bloqueadas em uso; confirmação em modal somente quando solicitada; campos explícitos de descrição/ícone; limites e validações; labels e foco acessíveis; ordem alfabética. Textos de auditoria fiscal e integração real foram substituídos por informações coerentes com a demonstração. As referências permanecem intactas.
 
-O contrato permanece provisório em [api-contract.md](api-contract.md). Relatórios será implementado somente após aprovação desta etapa.
+O contrato permanece provisório em [api-contract.md](api-contract.md). A etapa 8 foi implementada em [Relatórios](reports.md), reutilizando as categorias atuais na distribuição de despesas.

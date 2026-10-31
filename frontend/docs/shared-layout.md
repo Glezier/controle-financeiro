@@ -4,6 +4,7 @@ Registro da etapa 3. Na [etapa 4](authentication.md), o perfil fixo foi substitu
 Na [etapa 5](dashboard.md), a Visão Geral recebeu dados financeiros, e o contêiner da tabela foi ajustado para conter rótulos acessíveis e o foco em telas estreitas.
 Na [etapa 6](transactions.md), `/transacoes` recebeu a gestão de lançamentos com os componentes compartilhados. A tabela de rotas abaixo registra o estado original da etapa 3.
 Na [etapa 7](categories.md), `/categorias` recebeu cadastro, edição e exclusão simulada com preservação dos vínculos.
+Na [etapa 8](reports.md), `/relatorios` recebeu filtros, indicadores e gráficos sobre o mesmo conjunto de dados; todas as rotas financeiras deixaram de ser espaços reservados.
 
 ## Entrega
 

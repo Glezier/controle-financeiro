@@ -43,7 +43,7 @@ Os nomes, endpoints e verbos HTTP não estão definidos. O formato `FinanceResul
 
 Categorias têm identificador, nome e tipo. `appearance` (ícone/cor/descrição visual) é metadado demonstrativo opcional; não existe no schema e não exige alteração do backend. Respostas de dashboard e períodos são modelos de apresentação provisórios; a equipe pode disponibilizar agregações no servidor com outro formato, preservando as regras documentadas.
 
-Pendências não entram no saldo disponível nem na distribuição de despesas efetivadas. Categoria obrigatória, do mesmo usuário e tipo, e valor positivo são regras existentes no contexto/schema. O limite de 200 caracteres da descrição é uma decisão provisória do cliente. Contratos de relatórios serão alinhados em sua etapa.
+Pendências não entram no saldo disponível nem na distribuição de despesas efetivadas. Categoria obrigatória, do mesmo usuário e tipo, e valor positivo são regras existentes no contexto/schema. O limite de 200 caracteres da descrição é uma decisão provisória do cliente.
 
 A futura URL da API será configurada por variável de ambiente com `.env.example` quando houver chamadas HTTP. Nenhuma URL privada ou credencial real é necessária para a simulação atual.
 
@@ -83,3 +83,17 @@ Nome é obrigatório, aparado nas extremidades e limitado provisoriamente a 80 c
 As restrições refletem o schema inspecionado: relação composta categoria/usuário/tipo com `onDelete: Restrict` e `onUpdate: Restrict`. Renomear preserva o UUID e as transações, atualizando suas identificações. Nenhuma operação remove categoria de transações ou altera automaticamente seu tipo. Categorias sem vínculos podem mudar de tipo ou ser excluídas.
 
 `categoryService` e `financeService` compartilham a mesma instância de dados em memória; testes podem injetar adaptadores isolados. O e-mail de escopo continua exclusivo do mock. Os métodos retornam Promises com latência, cancelamento e erros tipados internos; nenhum endpoint, payload HTTP ou código de resposta é definido aqui como contrato definitivo. URLs, autorização real, agregações, unicidade e tratamento de concorrência permanecem pontos de alinhamento.
+
+## Relatórios — etapa 8
+
+| Operação interna | Entrada atual | Resultado necessário para a interface |
+| --- | --- | --- |
+| `getReport` | Proprietário do mock, `ReportQuery` e opções de cancelamento/simulação | `ReportSnapshot` ou erro tipado |
+
+`ReportQuery` contém `period` (`YYYY-MM`, mês de referência) e `range`: `month`, `quarter` ou `year`. A URL da interface utiliza esses mesmos nomes. `quarter` significa janela móvel de até três meses terminando no mês de referência; não é trimestre civil. `year` cobre janeiro a dezembro do ano informado, inclusive meses posteriores ao mês de referência. Datas financeiras e períodos são tratados sem conversão de fuso horário.
+
+`ReportSnapshot` contém consulta, início/fim do intervalo, resumo efetivado/pendente, contagem de lançamentos, `resultRate`, série mensal e despesas agrupadas por categoria. A série mensal contém período, receitas/despesas/saldo em centavos e contagem de lançamentos; meses sem dados retornam zero. Na modalidade mensal, a série inclui até três meses anteriores como contexto, enquanto resumo e distribuição permanecem no mês selecionado. Nas demais modalidades, série e resumo abrangem o mesmo intervalo. A janela é limitada ao calendário suportado de 0001 a 9999, sem fabricar meses anteriores ao ano 1.
+
+Totais usam apenas `paid`; pendências ficam separadas. `resultRate` é a razão saldo/receitas efetivadas, exibida como percentual; retorna `null` sem receitas, e pode ser negativa. Distribuição por categoria soma as despesas efetivadas do intervalo e calcula a participação sobre seu total. Nome e aparência provisória acompanham a categoria atual, sem congelar rótulos antigos.
+
+O serviço compartilha a instância de dados com categorias/transações, e permite injeção de adaptador em testes. Agregações são realizadas localmente somente para a demonstração. A integração deverá alinhar agregações no servidor, intervalos e normalização, formato decimal/centavos, autorização, retorno de meses vazios e consistência entre agregações e lançamentos. O frontend não pressupõe que a API precise retornar este modelo de apresentação ou expor um endpoint específico. Nenhum endpoint, exportador ou cálculo de reserva/orçamento foi criado.
