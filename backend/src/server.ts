@@ -1,12 +1,8 @@
-import "dotenv/config";
-import { app } from "./app.js";
+import app, { database } from './index.js';
+import { loadEnv } from './config/env.js';
 
-const port = Number(process.env.PORT ?? 3000);
-
-if (!Number.isInteger(port) || port < 1 || port > 65535) {
-  throw new Error("PORT deve ser um número entre 1 e 65535");
+const { PORT } = loadEnv();
+const server = app.listen(PORT, () => console.log(`API disponível em http://localhost:${PORT}`));
+for (const signal of ['SIGINT', 'SIGTERM'] as const) {
+  process.once(signal, () => { server.close(() => { void database.close().finally(() => process.exit(0)); }); });
 }
-
-app.listen(port, () => {
-  console.log(`API disponível em http://localhost:${port}`);
-});

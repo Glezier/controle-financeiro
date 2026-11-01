@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+.vercel/
+*.log
+src/generated/prisma/
+supabase/.temp/
+
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
