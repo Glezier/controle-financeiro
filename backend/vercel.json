@@ -1,6 +1,6 @@
 {
   "framework": "express",
-  "installCommand": "npm ci",
+  "installCommand": "npm ci --include=dev",
   "buildCommand": "npm run generate",
   "regions": ["iad1"],
   "functions": {
