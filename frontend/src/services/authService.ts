@@ -7,6 +7,7 @@ import type {
   RegistrationInput,
 } from '../types/auth'
 import { authFieldErrors, loginSchema, registrationSchema } from '../utils/authValidation'
+import { createApiAuthAdapter } from './apiAuthAdapter'
 
 // Demo-only presentation metadata is provided through the service boundary.
 export { demoAccess } from '../mocks/auth'
@@ -89,5 +90,5 @@ export function createAuthService(adapter: AuthAdapter = createMockAuth()) {
   }
 }
 
-export const authService = createAuthService()
+export const authService = createAuthService(createApiAuthAdapter())
 export type AuthService = ReturnType<typeof createAuthService>

@@ -8,6 +8,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>({ status: 'loading', user: null })
   useEffect(() => {
     let active = true
+
+    const onSessionExpired = () => {
+      if (active) {
+        setState({ status: 'anonymous', user: null })
+      }
+    }
+
+    window.addEventListener('auth:expired', onSessionExpired)
+
     void authService.getSession().then((result) => {
       if (!active) return
       setState(
@@ -18,6 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
     return () => {
       active = false
+      window.removeEventListener('auth:expired', onSessionExpired)
     }
   }, [])
 
