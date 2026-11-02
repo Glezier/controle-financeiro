@@ -1,0 +1,257 @@
+@layer components {
+  .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+  }
+  .ui-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-space-sm);
+    min-height: 2.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: 1.25rem;
+    transition:
+      background-color 150ms,
+      color 150ms;
+  }
+  .ui-button--primary {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+  .ui-button--primary:enabled:hover {
+    background: var(--color-primary-hover);
+  }
+  .ui-button--secondary {
+    border-color: var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-ink);
+  }
+  .ui-button--secondary:enabled:hover,
+  .ui-button--ghost:enabled:hover {
+    background: var(--color-surface-muted);
+  }
+  .ui-button--ghost {
+    color: var(--color-ink-secondary);
+  }
+  .ui-button--danger {
+    background: var(--color-error);
+    color: var(--color-on-primary);
+  }
+  .ui-button--danger:enabled:hover {
+    background: var(--color-expense);
+  }
+  .ui-button:disabled {
+    opacity: 0.55;
+  }
+  .ui-icon-button {
+    padding: 0.5rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+  .ui-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: var(--spacing-space-lg);
+    min-width: 0;
+  }
+  .ui-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1875rem 0.5rem;
+    border-radius: var(--radius-control);
+    font-size: var(--text-caption);
+    font-weight: 600;
+    line-height: 1rem;
+    white-space: nowrap;
+  }
+  .ui-badge--neutral {
+    color: var(--color-primary);
+    background: var(--color-surface-muted);
+  }
+  .ui-badge--income {
+    color: var(--color-income);
+    background: var(--color-income-subtle);
+  }
+  .ui-badge--expense {
+    color: var(--color-expense);
+    background: var(--color-expense-subtle);
+  }
+  .ui-badge--pending {
+    color: var(--color-warning);
+    background: var(--color-warning-subtle);
+  }
+  .ui-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    min-width: 0;
+  }
+  .ui-field label {
+    font-weight: 500;
+  }
+  .ui-field input,
+  .ui-field select {
+    width: 100%;
+    min-width: 0;
+    min-height: 2.5rem;
+    border: 1px solid var(--color-ink-muted);
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    padding: 0.5rem 0.75rem;
+  }
+  .ui-field input::placeholder {
+    color: var(--color-ink-secondary);
+  }
+  .ui-field :is(input, select):focus {
+    border-color: var(--color-primary);
+  }
+  .ui-field [aria-invalid='true'] {
+    border-color: var(--color-error);
+  }
+  .ui-field input:disabled,
+  .ui-field select:disabled {
+    background: var(--color-surface-subtle);
+  }
+  .ui-field-hint,
+  .ui-field-error {
+    font-size: var(--text-caption);
+    line-height: 1rem;
+  }
+  .ui-field-hint {
+    color: var(--color-ink-secondary);
+  }
+  .ui-field-error {
+    color: var(--color-error);
+  }
+  .ui-table-scroll {
+    position: relative;
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: var(--radius-card);
+  }
+  .ui-table-scroll:focus-visible {
+    outline-offset: -3px;
+  }
+  .ui-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    background: var(--color-surface);
+  }
+  .ui-table thead th {
+    background: var(--color-surface-subtle);
+    color: var(--color-ink-secondary);
+    font-size: var(--text-label);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .ui-table tbody th {
+    font-weight: 500;
+  }
+  .ui-table th,
+  .ui-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+    white-space: nowrap;
+  }
+  .ui-table tbody tr:hover {
+    background: var(--color-surface-subtle);
+  }
+  .ui-table .amount-cell {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .ui-modal {
+    padding: 0;
+    margin: auto;
+    width: min(32rem, calc(100% - 2rem));
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 0;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-dialog);
+    overflow-y: auto;
+  }
+  .ui-modal::backdrop {
+    background: var(--color-backdrop);
+  }
+  .ui-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+  .ui-modal-body {
+    padding: var(--spacing-space-lg);
+  }
+  .ui-modal--drawer {
+    margin: 0;
+    width: min(20rem, calc(100% - 2rem));
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+  .ui-modal--drawer .ui-modal-body {
+    padding: 0;
+  }
+  .ui-modal--drawer[open] {
+    display: flex;
+    flex-direction: column;
+  }
+  .ui-modal--drawer .ui-modal-body {
+    display: flex;
+    flex: 1;
+  }
+  .ui-feedback {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-space-sm);
+    padding: var(--spacing-space-md);
+    border-radius: var(--radius-card);
+    background: var(--color-surface-subtle);
+    color: var(--color-ink-secondary);
+  }
+  .ui-feedback > .icon,
+  .ui-feedback > .ui-spinner {
+    margin-top: 0.125rem;
+  }
+  .ui-feedback--error {
+    background: var(--color-error-subtle);
+    color: var(--color-on-error-subtle);
+  }
+  .ui-feedback--success {
+    background: var(--color-income-subtle);
+    color: var(--color-income);
+  }
+  .ui-feedback--empty {
+    justify-content: center;
+    padding-block: var(--spacing-space-xl);
+  }
+  .ui-spinner {
+    display: inline-block;
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: ui-spin 800ms linear infinite;
+  }
+  @keyframes ui-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
