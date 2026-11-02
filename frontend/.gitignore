@@ -15,6 +15,10 @@ coverage/
 test-results/
 playwright-report/
 *.local
+.env
+.env.*
+!.env.example
+.vercel/
 
 # Editor directories and files
 .vscode/*

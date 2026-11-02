@@ -1,0 +1,12 @@
+{
+  "framework": "express",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run generate",
+  "regions": ["iad1"],
+  "functions": {
+    "src/index.ts": {
+      "includeFiles": "certs/*.crt",
+      "maxDuration": 30
+    }
+  }
+}
