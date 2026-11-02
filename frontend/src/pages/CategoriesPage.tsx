@@ -87,7 +87,7 @@ export function CategoriesPage() {
             </Button>
           }
         >
-          As alterações já estão disponíveis nos lançamentos e indicadores da demonstração.
+          As alterações foram salvas na sua conta.
         </Feedback>
       )}
       {state.status === 'loading' && (
@@ -116,7 +116,7 @@ export function CategoriesPage() {
                 <h2 className="text-label uppercase text-ink-secondary">Total de Categorias</h2>
                 <p>
                   <strong className="text-metric financial-figure">{state.data.total}</strong>{' '}
-                  cadastradas na demonstração
+                  cadastradas na sua conta
                 </p>
                 <p className="text-caption text-ink-secondary">
                   {state.data.incomeCount} de receita · {state.data.expenseCount} de despesa
@@ -162,7 +162,7 @@ export function CategoriesPage() {
         </>
       )}
       <p className="text-caption text-ink-secondary">
-        Dados em memória. Recarregar reinicia as categorias e os lançamentos fictícios.
+        Categorias salvas no banco de dados e vinculadas à sua conta.
       </p>
       <DeleteCategoryDialog
         scope={auth.user.email}

@@ -52,8 +52,8 @@ function Confirmation({
         Excluir a categoria <strong className="break-words">{category.name}</strong>?
       </p>
       <p>
-        Somente categorias sem transações vinculadas podem ser excluídas. Esta alteração afeta
-        apenas a demonstração em memória.
+        Somente categorias sem transações vinculadas podem ser excluídas. A categoria será
+        removida da sua conta.
       </p>
       {failure && (
         <Feedback kind="error" title="Categoria não excluída">

@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { createMockFinance, mockFinanceAdapter } from '../mocks/finance'
+import { createMockFinance } from '../mocks/finance'
+import { createApiCategoryService } from './apiCategoryService'
 import type {
   Category,
   CategoryDraft,
@@ -129,4 +130,4 @@ export function createCategoryService(adapter: FinanceAdapter = createMockFinanc
   }
 }
 
-export const categoryService = createCategoryService(mockFinanceAdapter)
+export const categoryService = createApiCategoryService()

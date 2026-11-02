@@ -1,8 +1,9 @@
 import { useFormSubmission } from '../../hooks/useFormSubmission'
 import { useEffect, useState } from 'react'
-import type { Category, CategoryDraft, CategoryView } from '../../types/finance'
+import type { Category, CategoryView } from '../../types/finance'
 import { categoryService } from '../../services/categoryService'
-import { categoryColors, categoryIcons, categorySchema } from '../../utils/categoryValidation'
+import { apiCategoryIcons, apiCategoryIconSchema, apiCategoryInputSchema } from '../../utils/apiCategory'
+import type { ApiCategoryInput } from '../../utils/apiCategory'
 import { Feedback } from '../feedback/Feedback'
 import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
@@ -23,15 +24,13 @@ export function CategoryForm({
   onSaved: (category: Category) => void
   onCancel: () => void
 }) {
-  const [values, setValues] = useState<CategoryDraft>({
+  const [values, setValues] = useState<ApiCategoryInput>({
     name: category?.name ?? '',
     type: category?.type ?? 'expense',
-    description: category?.appearance?.description ?? '',
-    color: category?.appearance?.color ?? categoryColors[0].value,
-    icon: category?.appearance?.icon ?? 'home',
+    icon: apiCategoryIconSchema.safeParse(category?.apiIcon).data ?? 'category',
   })
   const { formRef, busy, errors, failure, submit } = useFormSubmission(
-    categorySchema,
+    apiCategoryInputSchema,
     (input, options) =>
       category
         ? categoryService.updateCategory(scope, category.id, input, options)
@@ -92,21 +91,12 @@ export function CategoryForm({
               inUse ? 'Tipo bloqueado: esta categoria possui transações vinculadas.' : undefined
             }
             onChange={(event) =>
-              setValues({ ...values, type: event.target.value as CategoryDraft['type'] })
+              setValues({ ...values, type: event.target.value as ApiCategoryInput['type'] })
             }
           >
             <option value="expense">Despesa</option>
             <option value="income">Receita</option>
           </SelectField>
-          <TextField
-            label="Descrição visual (opcional)"
-            name="description"
-            value={values.description}
-            maxLength={160}
-            placeholder="Ex.: Material, cursos e bibliografia"
-            error={errors.description}
-            onChange={(event) => setValues({ ...values, description: event.target.value })}
-          />
           <SelectField
             label="Ícone de identificação"
             name="icon"
@@ -114,42 +104,15 @@ export function CategoryForm({
             required
             error={errors.icon}
             onChange={(event) =>
-              setValues({ ...values, icon: event.target.value as CategoryDraft['icon'] })
+              setValues({ ...values, icon: event.target.value as ApiCategoryInput['icon'] })
             }
           >
-            {categoryIcons.map((icon) => (
+            {apiCategoryIcons.map((icon) => (
               <option key={icon.value} value={icon.value}>
                 {icon.label}
               </option>
             ))}
           </SelectField>
-          <fieldset className="category-colors">
-            <legend>Cor de identificação</legend>
-            <div>
-              {categoryColors.map((color) => (
-                <label key={color.value} className="category-color" title={color.label}>
-                  <input
-                    className="sr-only"
-                    type="radio"
-                    name="color"
-                    value={color.value}
-                    checked={values.color === color.value}
-                    onChange={() => setValues({ ...values, color: color.value })}
-                  />
-                  <span style={{ backgroundColor: color.value }} />
-                  <span className="sr-only">{color.label}</span>
-                </label>
-              ))}
-            </div>
-            {errors.color && (
-              <p role="alert" className="ui-field-error">
-                {errors.color}
-              </p>
-            )}
-          </fieldset>
-          <p className="text-caption text-ink-secondary">
-            Descrição, ícone e cor são apenas recursos visuais desta demonstração.
-          </p>
         </fieldset>
         <div className="category-form-actions">
           <Button type="submit" loading={busy}>

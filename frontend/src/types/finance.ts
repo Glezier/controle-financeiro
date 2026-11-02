@@ -5,6 +5,8 @@ export interface Category {
   id: string
   name: string
   type: TransactionType
+  // Identificador persistido pelo backend; appearance contém sua apresentação.
+  apiIcon?: string
   // Provisional display metadata; not fields of the backend schema.
   appearance?: {
     color: string
