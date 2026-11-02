@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useDashboard } from '../hooks/useDashboard'
-import { financeDemoPeriod } from '../services/financeService'
+import { currentFinancialPeriod } from '../utils/apiTransaction'
+import { isApiPeriod } from '../services/apiReportService'
 import type { TransactionView } from '../types/finance'
 import {
   formatFinancialDate,
   formatMoney,
   formatPeriod,
-  isFinancialPeriod,
 } from '../utils/financeFormat'
 import { ExpensesChart } from '../components/dashboard/ExpensesChart'
 import { FinancialSummary } from '../components/dashboard/FinancialSummary'
@@ -23,7 +23,7 @@ export function DashboardPage() {
   const { state: auth } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const requestedPeriod = searchParams.get('period') ?? ''
-  const period = isFinancialPeriod(requestedPeriod) ? requestedPeriod : financeDemoPeriod
+  const period = isApiPeriod(requestedPeriod) ? requestedPeriod : currentFinancialPeriod()
   const user = auth.user
   const { state, reload } = useDashboard(
     user?.email ?? '',
@@ -160,8 +160,7 @@ export function DashboardPage() {
             />
           </div>
           <p className="text-caption text-ink-secondary">
-            Demonstração em memória · dados financeiros fictícios. O período inicial segue a
-            referência de outubro de 2024.
+            Indicadores calculados no banco sobre os lançamentos da sua conta e do período selecionado.
           </p>
         </>
       )}

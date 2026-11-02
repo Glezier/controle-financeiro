@@ -185,7 +185,7 @@ export function TransactionsPage() {
         </>
       )}
       <p className="text-caption text-ink-secondary">
-        Demonstração em memória. Recarregar reinicia os lançamentos fictícios.
+        Lançamentos salvos no banco de dados e vinculados à sua conta.
       </p>
       <Modal
         title={form?.kind === 'edit' ? 'Editar Transação' : 'Registrar Nova Transação'}

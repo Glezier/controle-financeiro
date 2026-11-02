@@ -207,6 +207,8 @@ describe('API HTTP com Prisma e PostgreSQL reais; somente Auth simulado', () => 
     const monthly = await request(app).get('/api/v1/reports/monthly?year=2026').set(auth).expect(200);
     expect(monthly.body.data.months).toHaveLength(12);
     expect(monthly.body.data.months[9].net).toBe('60.00');
+    expect(monthly.body.data.months[9].transaction_count).toBe(3);
+    expect(monthly.body.data.months[0].transaction_count).toBe(0);
   });
   it('CORS rejeita origem não configurada e valida o corpo JSON', async () => {
     await request(app).get('/health').set('Origin', 'https://outro.example.com').expect(403);
@@ -253,6 +255,7 @@ describe('API HTTP com Prisma e PostgreSQL reais; somente Auth simulado', () => 
     const expenseQuery = { ...query, category_id: EXPENSE, type: 'expense', status: 'paid', search: 'intervalo' };
     const filtered = await request(app).get('/api/v1/reports/monthly').set(auth).query(expenseQuery).expect(200);
     expect(filtered.body.data.months.map((row: { paid_income: string }) => row.paid_income)).toEqual(['0.00', '0.00', '0.00']);
+    expect(filtered.body.data.months.map((row: { transaction_count: number }) => row.transaction_count)).toEqual([1, 1, 1]);
     const oneDay = await request(app).get('/api/v1/reports/monthly').set(auth)
       .query({ start_date: '2024-02-29', end_date: '2024-02-29' }).expect(200);
     expect(oneDay.body.data.months).toHaveLength(1);
@@ -264,6 +267,7 @@ describe('API HTTP com Prisma e PostgreSQL reais; somente Auth simulado', () => 
     authUser = B;
     const other = await request(app).get('/api/v1/reports/monthly').set(auth).query(query).expect(200);
     expect(other.body.data.months.every((row: { net: string }) => row.net === '0.00')).toBe(true);
+    expect(other.body.data.months.every((row: { transaction_count: number }) => row.transaction_count === 0)).toBe(true);
   });
   it('retorna meses vazios e rejeita filtros de período inválidos pela API', async () => {
     const response = await request(app).get('/api/v1/reports/monthly').set(auth)

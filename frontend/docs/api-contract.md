@@ -1,5 +1,10 @@
 # Expectativas provisórias da API
 
+Atualização: o contrato implementado para a aplicação está documentado em
+`category-api-integration.md`, `transaction-api-integration.md` e
+`report-api-integration.md`. A autenticação também usa a API real. O conteúdo
+abaixo preserva as expectativas da etapa anterior, baseada em mocks.
+
 Este documento registra necessidades do frontend; não define endpoints existentes nem impõe alterações ao backend. Na inspeção inicial, o backend expunha apenas `/health` e `/health/db`. O contexto do projeto prevê Supabase Auth e comunicação separada com a API.
 
 ## Autenticação

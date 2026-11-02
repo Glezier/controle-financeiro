@@ -3,7 +3,7 @@
 A aplicação usa a API autenticada para listar, criar, editar e excluir transações.
 `createFinanceService(adapter)` continua disponível para os testes dos mocks;
 a instância `financeService` substitui suas operações de transações pelo serviço HTTP.
-Dashboard e relatórios ainda exibem mocks nesta etapa. O atalho de criação do
+Dashboard e relatórios também usam a API (veja `report-api-integration.md`). O atalho de criação do
 dashboard abre `/transacoes?new=1`, usando o cadastro real e suas categorias.
 
 ## Contrato e persistência
@@ -61,5 +61,5 @@ na suíte padrão. Os testes E2E antigos ainda pressupõem a demonstração simu
 Para conferir no navegador, entre no frontend, abra Transações, crie uma pendência,
 recarregue, filtre pelo mês/categoria, efetive pela edição e exclua. Verifique também
 que uma categoria recém-criada na tela Categorias aparece no formulário e que outra
-conta não vê os lançamentos. Os totais do dashboard só refletirão essas alterações
-depois de sua própria etapa de integração.
+conta não vê os lançamentos. Voltar ao dashboard ou recarregar o relatório consulta
+os totais atualizados para o período selecionado.

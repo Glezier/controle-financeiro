@@ -1,9 +1,10 @@
-import { createMockFinance, mockFinanceAdapter } from '../mocks/finance'
+import { createMockFinance } from '../mocks/finance'
 import type { FinanceAdapter, FinanceRequestOptions, FinanceResult } from '../types/finance'
 import type { ReportQuery, ReportSnapshot } from '../types/reports'
 import { reportQuerySchema } from '../utils/reportPeriods'
 import { summarizeReport } from '../utils/reportSummary'
 import { financeRequest } from './financeRequest'
+import { apiReportService } from './apiReportService'
 
 export function createReportService(adapter: FinanceAdapter = createMockFinance()) {
   return {
@@ -31,4 +32,4 @@ export function createReportService(adapter: FinanceAdapter = createMockFinance(
     },
   }
 }
-export const reportService = createReportService(mockFinanceAdapter)
+export const reportService = { getReport: apiReportService.getReport }

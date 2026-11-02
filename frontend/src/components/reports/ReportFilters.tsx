@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import type { ReportQuery, ReportRange } from '../../types/reports'
-import { isFinancialPeriod } from '../../utils/financeFormat'
+import { isApiPeriod } from '../../services/apiReportService'
 import { TextField } from '../forms/Field'
 import { Button } from '../ui/Button'
 
@@ -17,7 +17,7 @@ export function ReportFilters({
     const form = formRef.current
     if (!form) return
     const period = String(new FormData(form).get('period') ?? '')
-    if (!isFinancialPeriod(period)) {
+    if (!isApiPeriod(period)) {
       setInvalidPeriod(query.period)
       form.querySelector<HTMLInputElement>('input')?.focus()
       return
@@ -62,11 +62,11 @@ export function ReportFilters({
           label="Mês de referência"
           name="period"
           type="month"
-          min="0001-01"
-          max="9999-12"
+          min="1900-01"
+          max="9998-12"
           defaultValue={query.period}
           required
-          error={invalidPeriod === query.period ? 'Informe um mês e ano válidos.' : undefined}
+          error={invalidPeriod === query.period ? 'Informe um mês entre 1900 e 9998.' : undefined}
           onChange={() => setInvalidPeriod(null)}
         />
         <Button type="submit" variant="secondary">

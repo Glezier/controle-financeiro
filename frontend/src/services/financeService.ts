@@ -1,6 +1,7 @@
 import { financeRequest as request } from './financeRequest'
 import { transactionService } from './apiTransactionService'
-import { createMockFinance, mockFinanceAdapter } from '../mocks/finance'
+import { apiReportService } from './apiReportService'
+import { createMockFinance } from '../mocks/finance'
 import { z } from 'zod'
 import type {
   DashboardSnapshot,
@@ -18,7 +19,6 @@ import { isFinancialPeriod, parseBrlAmount } from '../utils/financeFormat'
 import { transactionFieldErrors, transactionSchema } from '../utils/transactionValidation'
 import { selectTransactions, transactionQuerySchema } from '../utils/transactionQuery'
 
-export { financeDemoPeriod } from '../mocks/finance'
 
 export function createFinanceService(adapter: FinanceAdapter = createMockFinance()) {
   const missing = (): FinanceResult<never> => ({
@@ -165,6 +165,6 @@ export function createFinanceService(adapter: FinanceAdapter = createMockFinance
 }
 
 export const financeService = {
-  ...createFinanceService(mockFinanceAdapter),
+  getDashboard: apiReportService.getDashboard,
   ...transactionService,
 }

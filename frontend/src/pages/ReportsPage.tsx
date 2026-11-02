@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useReport } from '../hooks/useReport'
-import { financeDemoPeriod } from '../services/financeService'
+import { currentFinancialPeriod } from '../utils/apiTransaction'
 import {
   readReportQuery,
   reportPeriodLabel,
@@ -22,7 +22,7 @@ import { Icon } from '../components/ui/Icon'
 export function ReportsPage() {
   const { state: auth } = useAuth()
   const [params, setParams] = useSearchParams()
-  const query = readReportQuery(params, financeDemoPeriod)
+  const query = readReportQuery(params, currentFinancialPeriod())
   const { state, reload } = useReport(
     auth.user?.email ?? '',
     query,
@@ -42,7 +42,7 @@ export function ReportsPage() {
       <Card className="reports-heading">
         <div>
           <p className="text-label uppercase text-primary">
-            Métricas consolidadas · Dados demonstrativos
+            Métricas consolidadas · Sua conta
           </p>
           <h1 className="text-heading md:text-display">Relatórios Financeiros</h1>
           <p className="mt-space-sm text-ink-secondary">
@@ -150,8 +150,8 @@ export function ReportsPage() {
         </>
       )}
       <Feedback kind="info" title="Regra de cálculo">
-        Relatórios calculados sobre receitas e despesas efetivadas. Dados em memória, reiniciados ao
-        recarregar a página.
+        Relatórios calculados no banco sobre receitas e despesas efetivadas da sua conta.
+        Pendências são apresentadas separadamente.
       </Feedback>
     </div>
   )

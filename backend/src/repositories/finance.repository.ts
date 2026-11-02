@@ -134,7 +134,20 @@ export class FinanceRepository {
       const rows = await tx.$queryRaw<{ report: Prisma.JsonValue }[]>`SELECT public.monthly_evolution_range(
         ${from}::date, ${until}::date, ${filters.category_id ?? null}::uuid, ${filters.type ?? null}::text,
         ${filters.status ?? null}::text, ${filters.search || null}::text) AS report`;
-      return rows[0]!.report;
+      const counts = await tx.$queryRaw<{ year: number; month: number; transaction_count: number }[]>`
+        SELECT extract(year FROM date)::integer AS year, extract(month FROM date)::integer AS month,
+          count(*)::integer AS transaction_count
+        FROM public.transactions
+        WHERE user_id = ${this.userId}::uuid AND date >= ${from}::date AND date < ${until}::date
+          AND (${filters.category_id ?? null}::uuid IS NULL OR category_id = ${filters.category_id ?? null}::uuid)
+          AND (${filters.type ?? null}::text IS NULL OR type::text = ${filters.type ?? null}::text)
+          AND (${filters.status ?? null}::text IS NULL OR status::text = ${filters.status ?? null}::text)
+          AND (${filters.search || null}::text IS NULL OR strpos(lower(description), lower(${filters.search || null}::text)) > 0)
+        GROUP BY 1, 2`;
+      const report = rows[0]!.report as Prisma.JsonObject;
+      return { ...report, months: (report.months as Prisma.JsonObject[]).map((month) => ({
+        ...month, transaction_count: counts.find((row) => row.year === month.year && row.month === month.month)?.transaction_count ?? 0,
+      })) };
     });
   }
 }

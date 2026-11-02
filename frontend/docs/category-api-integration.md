@@ -2,9 +2,8 @@
 
 A instância `categoryService` utilizada pela aplicação acessa a API autenticada.
 A fábrica `createCategoryService(adapter)` foi preservada para os testes isolados
-com dados simulados. Transações também usam a API, conforme a documentação de
-integração de transações. Dashboard e relatórios ainda serão integrados em etapas
-seguintes; seus mocks não recebem as alterações de categorias reais.
+com dados simulados. Transações, dashboard e relatórios também usam a API;
+alterações persistidas nas categorias são refletidas ao carregar essas telas.
 
 ## Contrato
 
