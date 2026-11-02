@@ -4,10 +4,11 @@ Interface do MVP acadêmico de controle financeiro pessoal, independente de `bac
 
 ## Estado atual
 
-Atualização da integração: autenticação e gerenciamento de categorias já utilizam
+Atualização da integração: autenticação, categorias e transações já utilizam
 a API real. Configure `VITE_API_URL` em `.env.local` e execute o backend para esses
 fluxos. Consulte [Integração de categorias](docs/category-api-integration.md).
-Transações, dashboard e relatórios ainda usam dados simulados. As seções abaixo
+Consulte também [Integração de transações](docs/transaction-api-integration.md).
+Dashboard e relatórios ainda usam dados simulados. As seções abaixo
 registram a entrega original do frontend demonstrativo e seus testes.
 
 Etapa 10: implementação e validação do frontend com dados simulados concluídas. Login/cadastro, dashboard, transações, categorias e relatórios possuem serviços separados, componentes reutilizáveis e testes. Categorias em uso mantêm exclusão e troca de tipo bloqueadas; a amostra de componentes está em `/componentes` após entrar.

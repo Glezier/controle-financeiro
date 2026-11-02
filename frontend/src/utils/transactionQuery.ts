@@ -32,7 +32,7 @@ export function readTransactionQuery(
     type: type === 'income' || type === 'expense' ? type : 'all',
     status: status === 'paid' || status === 'pending' ? status : 'all',
     categoryId: z.uuid().safeParse(category).success ? category : 'all',
-    search: (params.get('q') ?? '').slice(0, 200),
+    search: (params.get('q') ?? '').slice(0, 100),
     page: Number.isSafeInteger(page) && page > 0 ? Math.min(page, 10000) : 1,
   }
 }

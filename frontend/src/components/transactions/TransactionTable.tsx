@@ -35,7 +35,7 @@ export function TransactionTable({
             }
           >
             {data.totalRecords === 0
-              ? 'Use Nova Transação para começar sua demonstração.'
+              ? 'Use Nova Transação para registrar sua primeira movimentação.'
               : 'Altere a busca ou limpe os filtros para consultar outras movimentações.'}
           </Feedback>
         </div>

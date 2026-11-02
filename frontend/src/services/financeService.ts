@@ -1,4 +1,5 @@
 import { financeRequest as request } from './financeRequest'
+import { transactionService } from './apiTransactionService'
 import { createMockFinance, mockFinanceAdapter } from '../mocks/finance'
 import { z } from 'zod'
 import type {
@@ -163,4 +164,7 @@ export function createFinanceService(adapter: FinanceAdapter = createMockFinance
   }
 }
 
-export const financeService = createFinanceService(mockFinanceAdapter)
+export const financeService = {
+  ...createFinanceService(mockFinanceAdapter),
+  ...transactionService,
+}

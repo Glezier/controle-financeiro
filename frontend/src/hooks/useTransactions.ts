@@ -17,41 +17,46 @@ export function useTransactions(scope: string, query: TransactionQuery, simulate
   const key = JSON.stringify([scope, serializedQuery, simulateFailure, revision])
   useEffect(() => {
     const controller = new AbortController()
-    void financeService
-      .getTransactions(scope, JSON.parse(serializedQuery) as TransactionQuery, {
-        signal: controller.signal,
-        simulateFailure,
-      })
-      .then((response) => {
-        if (controller.signal.aborted) return
-        setResult((previous) => ({
-          key,
-          state: response.ok
-            ? { status: 'success', data: response.data }
-            : { status: 'error', message: response.error.message },
-          metadata: response.ok
-            ? {
-                scope,
-                categories: response.data.categories,
-                periods: response.data.availablePeriods,
-              }
-            : previous?.metadata?.scope === scope
-              ? previous.metadata
-              : undefined,
-        }))
-      })
-      .catch(() => {
-        if (!controller.signal.aborted)
+    const timer = setTimeout(() => {
+      void financeService
+        .getTransactions(scope, JSON.parse(serializedQuery) as TransactionQuery, {
+          signal: controller.signal,
+          simulateFailure,
+        })
+        .then((response) => {
+          if (controller.signal.aborted) return
           setResult((previous) => ({
             key,
-            state: {
-              status: 'error',
-              message: 'Não foi possível carregar as transações. Tente novamente.',
-            },
-            metadata: previous?.metadata?.scope === scope ? previous.metadata : undefined,
+            state: response.ok
+              ? { status: 'success', data: response.data }
+              : { status: 'error', message: response.error.message },
+            metadata: response.ok
+              ? {
+                  scope,
+                  categories: response.data.categories,
+                  periods: response.data.availablePeriods,
+                }
+              : previous?.metadata?.scope === scope
+                ? previous.metadata
+                : undefined,
           }))
-      })
-    return () => controller.abort()
+        })
+        .catch(() => {
+          if (!controller.signal.aborted)
+            setResult((previous) => ({
+              key,
+              state: {
+                status: 'error',
+                message: 'Não foi possível carregar as transações. Tente novamente.',
+              },
+              metadata: previous?.metadata?.scope === scope ? previous.metadata : undefined,
+            }))
+        })
+    }, 250)
+    return () => {
+      clearTimeout(timer)
+      controller.abort()
+    }
   }, [scope, serializedQuery, simulateFailure, revision, key])
   const state: State = result?.key === key ? result.state : { status: 'loading' }
   return {

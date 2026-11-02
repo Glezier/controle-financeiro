@@ -65,10 +65,26 @@ export class FinanceRepository {
         ...(filters.category_id ? { categoryId: filters.category_id } : {}),
         ...(filters.search ? { description: { contains: escapeLike(filters.search), mode: 'insensitive' } } : {}) };
       const total = await tx.transaction.count({ where });
-      const rows = await tx.transaction.findMany({ where, skip: (filters.page - 1) * filters.limit, take: filters.limit,
+      const pages = Math.ceil(total / filters.limit);
+      const page = Math.min(filters.page, Math.max(1, pages));
+      const rows = await tx.transaction.findMany({ where, skip: (page - 1) * filters.limit, take: filters.limit,
         orderBy: [{ date: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }] });
-      return { data: rows.map(transactionJson), pagination: { page: filters.page, limit: filters.limit,
-        total, pages: Math.ceil(total / filters.limit) } };
+      const reports = await tx.$queryRaw<{ report: Prisma.JsonValue }[]>`SELECT public.financial_report(
+        ${from}::date, ${until}::date, ${filters.category_id ?? null}::uuid, ${filters.type ?? null}::text,
+        ${filters.status ?? null}::text, ${filters.search || null}::text) AS report`;
+      const metadata = await tx.$queryRaw<{ total_records: number; available_periods: string[] }[]>`
+        SELECT count(*)::integer AS total_records,
+          coalesce(array_agg(DISTINCT to_char(date, 'YYYY-MM') ORDER BY to_char(date, 'YYYY-MM') DESC), '{}'::text[]) AS available_periods
+        FROM public.transactions WHERE user_id = ${this.userId}::uuid`;
+      const nextPending = filters.status === 'paid' ? null : await tx.transaction.findFirst({
+        where: { ...where, status: 'pending' },
+        orderBy: [{ date: 'asc' }, { id: 'asc' }], select: { date: true },
+      });
+      return { data: rows.map(transactionJson), pagination: { page, limit: filters.limit, total, pages },
+        summary: { ...(reports[0]!.report as Prisma.JsonObject),
+          next_pending_date: filters.status === 'paid' ? null : nextPending?.date.toISOString().slice(0, 10) ?? null },
+        metadata: metadata[0]! };
+
     });
   }
 

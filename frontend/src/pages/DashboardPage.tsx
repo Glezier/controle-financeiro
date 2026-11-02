@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useDashboard } from '../hooks/useDashboard'
 import { financeDemoPeriod } from '../services/financeService'
-import type { Transaction, TransactionView } from '../types/finance'
+import type { TransactionView } from '../types/finance'
 import {
   formatFinancialDate,
   formatMoney,
@@ -13,13 +13,11 @@ import {
 import { ExpensesChart } from '../components/dashboard/ExpensesChart'
 import { FinancialSummary } from '../components/dashboard/FinancialSummary'
 import { RecentTransactions } from '../components/dashboard/RecentTransactions'
-import { TransactionForm } from '../components/forms/TransactionForm'
 import { TransactionDetails } from '../components/transactions/TransactionDetails'
 import { Feedback } from '../components/feedback/Feedback'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { Icon } from '../components/ui/Icon'
-import { Modal } from '../components/ui/Modal'
 
 export function DashboardPage() {
   const { state: auth } = useAuth()
@@ -32,25 +30,14 @@ export function DashboardPage() {
     period,
     searchParams.get('cenario') === 'erro',
   )
-  const [creating, setCreating] = useState(false)
+  const navigate = useNavigate()
   const [details, setDetails] = useState<TransactionView | null>(null)
-  const [savedPeriod, setSavedPeriod] = useState<string | null>(null)
   useEffect(() => {
     document.title = 'Visão Geral | Controle Financeiro'
   }, [])
   if (!user) return null
   const periods = state.status === 'success' ? state.data.availablePeriods : [period]
 
-  function handleCreated(transaction: Transaction) {
-    setCreating(false)
-    setSavedPeriod(transaction.date.slice(0, 7))
-    setSearchParams((previous) => {
-      previous.set('period', transaction.date.slice(0, 7))
-      previous.delete('cenario')
-      return previous
-    })
-    reload()
-  }
   function retry() {
     setSearchParams(
       (previous) => {
@@ -85,7 +72,6 @@ export function DashboardPage() {
               value={period}
               disabled={state.status !== 'success'}
               onChange={(event) => {
-                setSavedPeriod(null)
                 setSearchParams({ period: event.target.value })
               }}
             >
@@ -96,25 +82,12 @@ export function DashboardPage() {
               ))}
             </select>
           </div>
-          <Button disabled={state.status !== 'success'} onClick={() => setCreating(true)}>
+          <Button disabled={state.status !== 'success'} onClick={() => navigate('/transacoes?new=1')}>
             <Icon name="plus" />
             Nova Transação
           </Button>
         </div>
       </header>
-      {savedPeriod === period && (
-        <Feedback
-          kind="success"
-          title="Transação salva com sucesso!"
-          action={
-            <Button variant="ghost" onClick={() => setSavedPeriod(null)}>
-              Dispensar aviso
-            </Button>
-          }
-        >
-          Movimentação registrada na demonstração. Consulte abaixo os indicadores do período.
-        </Feedback>
-      )}
       {state.status === 'loading' && (
         <>
           <Feedback kind="loading" title="Carregando visão geral">
@@ -192,17 +165,6 @@ export function DashboardPage() {
           </p>
         </>
       )}
-      <Modal title="Registrar Nova Transação" open={creating} onClose={() => setCreating(false)}>
-        {creating && state.status === 'success' && (
-          <TransactionForm
-            scope={user.email}
-            period={period}
-            categories={state.data.categories}
-            onSaved={handleCreated}
-            onCancel={() => setCreating(false)}
-          />
-        )}
-      </Modal>
       <TransactionDetails transaction={details} onClose={() => setDetails(null)} />
     </div>
   )

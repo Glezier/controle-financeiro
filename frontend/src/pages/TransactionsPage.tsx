@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useTransactions } from '../hooks/useTransactions'
-import { financeDemoPeriod } from '../services/financeService'
+import { currentFinancialPeriod } from '../utils/apiTransaction'
 import type { Transaction, TransactionQuery, TransactionView } from '../types/finance'
 import { formatPeriod, isFinancialPeriod } from '../utils/financeFormat'
 import { readTransactionQuery, writeTransactionQuery } from '../utils/transactionQuery'
@@ -23,14 +23,14 @@ type FormState = { kind: 'create' } | { kind: 'edit'; transaction: TransactionVi
 export function TransactionsPage() {
   const { state: auth } = useAuth()
   const [params, setParams] = useSearchParams()
-  const query = readTransactionQuery(params, financeDemoPeriod)
+  const query = readTransactionQuery(params, 'all')
   const queryKey = writeTransactionQuery(query).toString()
   const { state, metadata, reload } = useTransactions(
     auth.user?.email ?? '',
     query,
     params.get('cenario') === 'erro',
   )
-  const [form, setForm] = useState<FormState | null>(null)
+  const [form, setForm] = useState<FormState | null>(() => params.get('new') === '1' ? { kind: 'create' } : null)
   const [details, setDetails] = useState<TransactionView | null>(null)
   const [deleting, setDeleting] = useState<TransactionView | null>(null)
   const [notice, setNotice] = useState<{ key: string; title: string } | null>(null)
@@ -50,11 +50,11 @@ export function TransactionsPage() {
   const periods =
     metadata?.periods ??
     Array.from(
-      new Set([financeDemoPeriod, ...(isFinancialPeriod(query.period) ? [query.period] : [])]),
+      new Set([currentFinancialPeriod(), ...(isFinancialPeriod(query.period) ? [query.period] : [])]),
     )
       .sort()
       .reverse()
-  const month = isFinancialPeriod(query.period) ? query.period : financeDemoPeriod
+  const month = isFinancialPeriod(query.period) ? query.period : currentFinancialPeriod()
   function change(changes: Partial<TransactionQuery>, replace = false) {
     setNotice(null)
     setParams(writeTransactionQuery({ ...query, ...changes, page: changes.page ?? 1 }), { replace })
@@ -151,7 +151,7 @@ export function TransactionsPage() {
             </Button>
           }
         >
-          Dados demonstrativos atualizados. Após salvar, os filtros são redefinidos para o mês do
+          Alterações salvas na sua conta. Após salvar, os filtros são redefinidos para o mês do
           lançamento; após excluir, os filtros ativos são preservados.
         </Feedback>
       )}

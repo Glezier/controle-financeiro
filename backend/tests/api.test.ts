@@ -151,6 +151,23 @@ describe('API HTTP com Prisma e PostgreSQL reais; somente Auth simulado', () => 
       .query({ year: 2026, month: 10, category_id: INCOME, type: 'income', status: 'paid', search: '10%_', page: 2, limit: 2 }).expect(200);
     expect(response.body.pagination).toEqual({ page: 2, limit: 2, total: 3, pages: 2 });
     expect(response.body.data).toHaveLength(1);
+    expect(response.body.summary).toMatchObject({ paid_income: '60.00', available_balance: '60.00', paid_income_count: 3 });
+    expect(response.body.metadata).toEqual({ total_records: 4, available_periods: ['2026-11', '2026-10'] });
+    const lastPage = await request(app).get('/api/v1/transactions').set(auth).query({ page: 999, limit: 2 }).expect(200);
+    expect(lastPage.body.pagination).toEqual({ page: 2, limit: 2, total: 4, pages: 2 });
+  });
+  it('calcula indicadores antes da paginação e isola metadados de outros usuários', async () => {
+    await request(app).post('/api/v1/transactions').set(auth).send(input()).expect(201);
+    await request(app).post('/api/v1/transactions').set(auth).send({ ...input(), category_id: EXPENSE,
+      type: 'expense', amount: 3.25, status: 'pending', date: '2026-10-01' }).expect(201);
+    const result = await request(app).get('/api/v1/transactions').set(auth).query({ limit: 1 }).expect(200);
+    expect(result.body.data).toHaveLength(1);
+    expect(result.body.summary).toMatchObject({ paid_income: '12.34', paid_expense: '0.00',
+      available_balance: '12.34', pending_expense: '3.25', pending_expense_count: 1, next_pending_date: '2026-10-01' });
+    authUser = B;
+    const other = await request(app).get('/api/v1/transactions').set(auth).expect(200);
+    expect(other.body.metadata).toEqual({ total_records: 0, available_periods: [] });
+    expect(other.body.summary).toMatchObject({ available_balance: '0.00', transaction_count: 0, next_pending_date: null });
   });
   it.each([
     ['income', 'paid'], ['income', 'pending'], ['expense', 'paid'], ['expense', 'pending'],

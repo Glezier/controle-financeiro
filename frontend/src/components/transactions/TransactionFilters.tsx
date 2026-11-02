@@ -32,7 +32,7 @@ export function TransactionFilters({
           type="search"
           name="search"
           placeholder="Buscar por descrição…"
-          maxLength={200}
+          maxLength={100}
           value={query.search}
           onChange={(event) => onChange({ search: event.target.value }, true)}
         />

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import type { Category, Transaction, TransactionDraft, TransactionType } from '../../types/finance'
 import { amountInputValue } from '../../utils/financeFormat'
 import { financeService } from '../../services/financeService'
-import { transactionSchema } from '../../utils/transactionValidation'
+import { apiTransactionInputSchema } from '../../utils/apiTransaction'
 import { Feedback } from '../feedback/Feedback'
 import { Button } from '../ui/Button'
 import { Icon } from '../ui/Icon'
@@ -48,7 +48,7 @@ export function TransactionForm({
         },
   )
   const { formRef, busy, errors, failure, submit } = useFormSubmission(
-    transactionSchema,
+    apiTransactionInputSchema,
     (input, options) =>
       initialTransaction
         ? financeService.updateTransaction(scope, initialTransaction.id, input, options)
@@ -101,7 +101,7 @@ export function TransactionForm({
           value={values.description}
           onChange={(event) => setValues({ ...values, description: event.target.value })}
           placeholder="Ex.: bolsa de pesquisa, material de estudo…"
-          maxLength={200}
+          maxLength={300}
           required
           error={errors.description}
         />
@@ -122,7 +122,7 @@ export function TransactionForm({
             label="Data"
             name="date"
             type="date"
-            min="0001-01-01"
+            min="1900-01-01"
             max="9999-12-31"
             value={values.date}
             onChange={(event) => setValues({ ...values, date: event.target.value })}
@@ -167,8 +167,7 @@ export function TransactionForm({
         )}
       </fieldset>
       <p className="text-caption text-ink-secondary">
-        Pendências não entram no saldo disponível. Dados desta demonstração são mantidos apenas até
-        recarregar a página.
+        Pendências não entram no saldo disponível. Os lançamentos são salvos na sua conta.
       </p>
       <div className="transaction-form-actions">
         <Button variant="ghost" onClick={onCancel}>

@@ -54,7 +54,7 @@ function Confirmation({
         {formatFinancialDate(transaction.date)}
       </p>
       <p className="text-caption text-ink-secondary">
-        A movimentação será removida da demonstração. Os indicadores serão recalculados conforme sua
+        A movimentação será removida da sua conta. Os indicadores serão recalculados conforme sua
         situação.
       </p>
       {failure && (
