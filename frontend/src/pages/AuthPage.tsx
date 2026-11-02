@@ -48,8 +48,8 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
           </nav>
           {registered && (
             <div className="mb-space-md">
-              <Feedback kind="success" title="Cadastro demonstrativo concluído">
-                Entre com o e-mail e a senha que você acabou de criar.
+              <Feedback kind="success" title="Solicitação de cadastro enviada">
+                Se necessário, confirme seu e-mail antes de entrar com a senha cadastrada.
               </Feedback>
             </div>
           )}
@@ -72,7 +72,6 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
             Ambiente de demonstração
           </p>
           <p className="mt-space-sm">Projeto acadêmico · use apenas dados fictícios.</p>
-          <p className="mt-space-xs">Sessão e cadastros são apagados ao recarregar a página.</p>
         </footer>
       </div>
     </main>

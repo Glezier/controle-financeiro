@@ -12,8 +12,8 @@ import { PasswordField } from './PasswordField'
 export function LoginForm({ initialEmail }: { initialEmail?: string }) {
   const { signIn } = useAuth()
   const [values, setValues] = useState({
-    email: initialEmail ?? demoAccess.email,
-    password: initialEmail ? '' : demoAccess.password,
+    email: initialEmail ?? '',
+    password: '',
   })
   const { formRef, busy, errors, failure, submit } = useFormSubmission(loginSchema, signIn)
   return (
@@ -57,21 +57,11 @@ export function LoginForm({ initialEmail }: { initialEmail?: string }) {
         />
       </fieldset>
       <p className="text-caption text-ink-secondary">
-        Acesso fictício: {demoAccess.email} · senha {demoAccess.password}.
+        Conta de apresentação: {demoAccess.email} · senha {demoAccess.password}.
       </p>
       <Button type="submit" className="auth-submit" loading={busy}>
         {busy ? 'Acessando…' : 'Acessar Sistema'}
         {!busy && <Icon name="arrowRight" />}
-      </Button>
-      <Button
-        variant="ghost"
-        className="auth-simulate"
-        disabled={busy}
-        onClick={() => {
-          void submit(values, true)
-        }}
-      >
-        Simular erro de acesso
       </Button>
     </form>
   )

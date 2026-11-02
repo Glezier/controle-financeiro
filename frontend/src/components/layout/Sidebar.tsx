@@ -86,7 +86,7 @@ export function Sidebar({
           id={showBrand ? 'desktop-signout-note' : 'mobile-signout-note'}
           className="text-caption text-ink-secondary"
         >
-          Sessão de demonstração, sem autenticação real.
+          Acesso à conta
         </p>
         {logoutError && (
           <p role="alert" className="text-caption text-error">
