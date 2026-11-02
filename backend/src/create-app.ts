@@ -1,7 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit';
+import { createRequire } from 'node:module';
+import type { RequestHandler } from 'express';
+import type { HelmetOptions } from 'helmet';
 import type { ClientFactory } from './domain/models.js';
 import { AppError, errorHandler } from './lib/errors.js';
 import { apiRoutes } from './routes/index.js';
@@ -12,6 +14,9 @@ export function createApp(options: { createClient: ClientFactory; database: User
   app.disable('x-powered-by');
   app.set('trust proxy', options.trustProxyHops ?? 0);
   app.set('query parser', 'simple');
+  const helmet = createRequire(import.meta.url)('helmet') as (
+    options?: HelmetOptions
+  ) => RequestHandler;
   app.use(helmet());
   app.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
   app.use(cors({ origin: (origin, callback) => {
