@@ -1,6 +1,8 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient, Prisma } from '../generated/prisma/client.js';
 import { databaseError } from './errors.js';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 export interface UserDatabase {
   withUser<T>(userId: string, work: (tx: Prisma.TransactionClient) => Promise<T>): Promise<T>;
@@ -9,6 +11,17 @@ export interface UserDatabase {
 }
 
 export function createDatabase(connectionString: string, maxConnections = 5): UserDatabase {
+  console.log('[database] Certificado:', {
+    cwd: process.cwd(),
+    certs: {
+      path: resolve('certs/prod-ca-2021.crt'),
+      exists: existsSync('certs/prod-ca-2021.crt'),
+    },
+    backendCerts: {
+      path: resolve('backend/certs/prod-ca-2021.crt'),
+      exists: existsSync('backend/certs/prod-ca-2021.crt'),
+    },
+  });
   const adapter = new PrismaPg({ connectionString, max: maxConnections, connectionTimeoutMillis: 10000 });
   const client = new PrismaClient({ adapter });
   return {
