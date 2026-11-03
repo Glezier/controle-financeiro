@@ -1,9 +1,11 @@
 import type { AuthError, Session, User } from '@supabase/supabase-js';
 import type { ClientFactory } from '../domain/models.js';
 import { AppError } from '../lib/errors.js';
+import { logDiagnostic } from '../lib/diagnostic.js';
 
 function authError(error: AuthError | null, fallback: string, status: number) {
   if (!error) return;
+  logDiagnostic('[auth] Erro original do Supabase', error);
   if (error.status === 429) throw new AppError(429, 'AUTH_RATE_LIMITED', 'Muitas tentativas. Aguarde e tente novamente.');
   if (!error.status || error.status >= 500) throw new AppError(503, 'AUTH_UNAVAILABLE', 'Serviço de autenticação indisponível.');
   throw new AppError(status, 'AUTH_FAILED', fallback);

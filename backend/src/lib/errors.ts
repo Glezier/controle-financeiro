@@ -1,5 +1,6 @@
 import type { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
+import { logDiagnostic } from './diagnostic.js';
 
 export class AppError extends Error {
   constructor(public status: number, public code: string, message: string) { super(message); }
@@ -7,6 +8,7 @@ export class AppError extends Error {
 
 export function databaseError(error: unknown): void {
   if (!error) return;
+  logDiagnostic('[database] Erro original', error);
   if (error instanceof AppError) throw error;
   const value = error as { code?: string; meta?: { code?: string; driverAdapterError?: { cause?: { originalCode?: string } } } };
   const code = value.meta?.driverAdapterError?.cause?.originalCode ?? value.meta?.code ?? value.code;
@@ -20,6 +22,7 @@ export function databaseError(error: unknown): void {
 }
 
 export const errorHandler: ErrorRequestHandler = (error: unknown, _req, res, _next) => {
+  logDiagnostic(`[api] ${_req.method} ${_req.path}`, error);
   if (error instanceof ZodError) {
     res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Verifique os dados informados.',
       issues: error.issues.map(({ path, message }) => ({ path: path.join('.'), message })) } });
@@ -37,6 +40,5 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, _req, res, _ne
       res.status(413).json({ error: { code: 'BODY_TOO_LARGE', message: 'Corpo da requisição muito grande.' } }); return;
     }
   }
-  console.error('Falha inesperada na API', error instanceof Error ? error.name : 'UnknownError');
   res.status(500).json({ error: { code: 'INTERNAL_ERROR', message: 'Erro interno.' } });
 };
