@@ -22,7 +22,9 @@ export function databaseError(error: unknown): void {
 }
 
 export const errorHandler: ErrorRequestHandler = (error: unknown, _req, res, _next) => {
-  logDiagnostic(`[api] ${_req.method} ${_req.path}`, error);
+  if (!(error instanceof AppError) && !(error instanceof ZodError)) {
+    logDiagnostic(`[api] ${_req.method} ${_req.path}`, error);
+  }
   if (error instanceof ZodError) {
     res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Verifique os dados informados.',
       issues: error.issues.map(({ path, message }) => ({ path: path.join('.'), message })) } });

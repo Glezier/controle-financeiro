@@ -1,6 +1,5 @@
 import { inspect } from 'node:util';
 
-// Temporário: remover após diagnosticar o deploy.
 export function logDiagnostic(context: string, error: unknown) {
   let details = inspect(error, { depth: 8, colors: false });
   for (const [key, value] of Object.entries(process.env)) {

@@ -9,24 +9,6 @@ function isPublicKey(key: string) {
   } catch { return false; }
 }
 
-const corsValue = process.env.CORS_ORIGINS;
-
-console.log('[cors] Configuração recebida:', JSON.stringify(corsValue));
-
-for (const item of (corsValue ?? '').split(',')) {
-  const value = item.trim();
-
-  try {
-    console.log('[cors] Comparação:', {
-      recebido: value,
-      normalizado: new URL(value).origin,
-      iguais: new URL(value).origin === value,
-    });
-  } catch {
-    console.log('[cors] URL inválida:', JSON.stringify(value));
-  }
-}
-
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(3001),

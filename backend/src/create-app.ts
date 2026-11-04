@@ -12,15 +12,6 @@ export function createApp(options: { createClient: ClientFactory; database: User
   app.disable('x-powered-by');
   app.set('trust proxy', options.trustProxyHops ?? 0);
   app.set('query parser', 'simple');
-  // Temporário: inclui respostas de erro enviadas diretamente por middlewares.
-  app.use((req, res, next) => {
-    res.on('finish', () => {
-      if (res.statusCode >= 400) {
-        console.error(`[http] ${req.method} ${req.path} -> ${res.statusCode}`);
-      }
-    });
-    next();
-  });
   app.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
   app.use(cors({ origin: (origin, callback) => {
     if (!origin || options.corsOrigins.includes(origin)) callback(null, true);
@@ -33,7 +24,6 @@ export function createApp(options: { createClient: ClientFactory; database: User
   app.get('/health/db', async (_req, res) => {
     try { await options.database.ping(); res.json({ status: 'ok', database: 'connected' }); }
     catch (error) {
-      // Temporário: diagnóstico da conexão durante o deploy.
       logDiagnostic('[health/db] Falha ao conectar ao banco:', error);
       res.status(503).json({ status: 'error', database: 'unavailable' });
     }
