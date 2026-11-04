@@ -2,7 +2,7 @@ import type { AuthAdapter, AuthResult } from '../types/auth'
 import type { UserProfile } from '../types/profile'
 
 // Public, fictitious credentials for the demonstration; never real account secrets.
-export const demoAccess = { email: 'lucas.mendes@email.com', password: '12345678' }
+export const demoAccess = { email: 'montalvaneglezier@gmail.com', password: '12345678' }
 const cancelled = (): AuthResult<never> => ({
   ok: false,
   error: { code: 'cancelled', message: 'Operação cancelada.' },
