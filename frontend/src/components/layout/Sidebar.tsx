@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom'
+import {  NavLink } from 'react-router-dom'
 import { navigation } from '../../routes/navigation'
 import type { UserProfile } from '../../types/profile'
 import { Button } from '../ui/Button'
@@ -93,9 +93,6 @@ export function Sidebar({
             {logoutError}
           </p>
         )}
-        <Link to="/componentes" onClick={onNavigate} className="text-caption underline">
-          Amostra de componentes
-        </Link>
       </div>
     </div>
   )
